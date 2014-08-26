@@ -35,9 +35,9 @@ order to keep track of every job and its stages.
 *   The workers can be written in any language. (I'm **assuming python, ruby & javascript**).
 *   The jobs can be described as json objects.
 *   The jobs are a combination of:
-    *      file manipulations (crud)
-*      database manipulation
-*      external services consumption (file uploading/downloading, external api call)
+    *   file manipulations (crud)
+    *      database manipulation
+    *      external services consumption (file uploading/downloading, external api call)
 *   A job can have a state object.
 *   The workers are by nature async.
 
