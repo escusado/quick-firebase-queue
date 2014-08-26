@@ -1,0 +1,7 @@
+{
+  "connections" : 1000,
+  "host"        : "localhost",
+  "log"         : "/var/log/borium/borium.log",
+  "port"        : 8200,
+  "storage"     : "/tmp/borium/"
+}

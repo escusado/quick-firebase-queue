@@ -1,4 +1,4 @@
-# Firebase based queue system
+# FireBQ
 
 ## Intro
 A queue system written in javascript for managing coordinated jobs flow, with
@@ -36,8 +36,8 @@ order to keep track of every job and its stages.
 *   The jobs can be described as json objects.
 *   The jobs are a combination of:
     *   file manipulations (crud)
-    *      database manipulation
-    *      external services consumption (file uploading/downloading, external api call)
+    *   database manipulation
+    *   external services consumption (file uploading/downloading, external api call)
 *   A job can have a state object.
 *   The workers are by nature async.
 
