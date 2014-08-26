@@ -32,10 +32,10 @@ order to keep track of every job and its stages.
 
 ## Assumptions
 
-*   RThe workers can be written in any language. (I'm **assuming python, ruby & javascript**).
-*   RThe jobs can be described as json objects.
-*   RThe jobs are a combination of:
-*      file manipulations (crud)
+*   The workers can be written in any language. (I'm **assuming python, ruby & javascript**).
+*   The jobs can be described as json objects.
+*   The jobs are a combination of:
+    *      file manipulations (crud)
 *      database manipulation
 *      external services consumption (file uploading/downloading, external api call)
 *   A job can have a state object.
