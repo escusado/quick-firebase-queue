@@ -20,13 +20,17 @@ self.on('end', function() {
 
 
 var addAge = function(){
-    charData.data.meta.age = 45;
+    charData.data.meta.age = Math.floor(Math.random()*500);
+
+
     charData.jobs.shift();
     if(charData.jobs.length === 0){
         charData.status = 'complete';
     }
-        // console.log('addAge', charData.jobs);
-    myFirebaseRef.child(charData.id).update(charData, function(snap){
-        process.exit(0);
-    });
+
+    setTimeout(function(){
+        myFirebaseRef.child(charData.id).update(charData, function(snap){
+            process.exit(0);
+        });
+    }, (Math.floor(Math.random()*3)) * 1000);
 };

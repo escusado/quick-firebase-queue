@@ -19,15 +19,66 @@ self.on('end', function() {
 });
 
 
+var names = {
+        hero: [
+            'Achilles',
+            'Agamemnon',
+            'Ajax',
+            'Ajax the Lesser',
+            'Amycus',
+            'Atlas',
+            'Actaeon',
+            'Admetus',
+            'Adonis',
+            'Capaneus',
+            'Castor and Pollux',
+            'Jason',
+            'Asklepios',
+            'Eteocles',
+            'Amphiaraus',
+            'Hercle',
+            'Lynceus',
+            'Meleager',
+            'Nestor',
+            'Menelaus'
+        ],
+
+        enemy : [
+            'Palamedes',
+            'Patroclus',
+            'Peleus',
+            'Perseus',
+            'Phaon',
+            'Phoenix',
+            'Prometheus',
+            'Castor and Pollux',
+            'Sisyphus',
+            'Daedalus',
+            'Teucer',
+            'Telamon',
+            'Tiresias',
+            'Theseus',
+            'Dioscuri',
+            'Tyndareus',
+            'Tydeus',
+            'Orpheus',
+            'Orestes',
+            'Odysseus'
+        ]
+};
+
 var addName = function(){
-    charData.data.meta.name = 'Aristocles';
+    charData.data.meta.name = names[charData.data.meta.charType][Math.floor(Math.random()*20)];
+
+
     charData.jobs.shift();
-    // console.log('>>> jobs', charData.jobs);
     if(charData.jobs.length === 0){
         charData.status = 'complete';
     }
-        console.log('addName', charData.jobs);
-    myFirebaseRef.child(charData.id).update(charData, function(snap){
-        process.exit(0);
-    });
+
+    setTimeout(function(){
+        myFirebaseRef.child(charData.id).update(charData, function(snap){
+            process.exit(0);
+        });
+    }, (Math.floor(Math.random()*3)) * 1000);
 };

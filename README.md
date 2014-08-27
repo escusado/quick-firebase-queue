@@ -231,7 +231,9 @@ holds which jobs and in which order they must be executed:
 In this paricular case, the data structure will be passed to the 'addName' worker first
 then to the `addStats` one in that order, until no more jobs are stored there (which would be the `complete` state).
 
-Workers are defined here at server instantiation
+Workers are defined here at server instantiation, in this case in the firebq wrapper ([here](https://github.com/escusado/quick-firebase-queue/blob/ui/bin/firebq/index.js#L25))
+
+So then we have full circle, the character can have all the scripts for him.
 
 
 

@@ -17,40 +17,40 @@ Class('CharacterCreator').includes(CustomEventSupport)({
             }, this);
 
             this._addCharacterType({
-                jobs : ['addName', 'addAge', 'addStats'],
+                jobs : ['addPortrait','addName', 'addAge', 'addStats', 'addClass'],
 
                 data : {
                     id: null,
                     meta:{
                         charType: 'hero',
-                        name: 'Reginald',
-                        class : null,
-                        age: null
+                        name: 'null',
+                        class : 'null',
+                        age: 'null'
                     },
                     portrait : null,
                     stats:{
-                        hp: 50,
-                        mp: 10,
-                        str: 50,
-                        agi: 60
+                        hp: 'null',
+                        mp: 'null',
+                        str: 'null',
+                        agi: 'null'
                     }
                 }
             });
 
 
             this._addCharacterType({
-                jobs : ['addName', 'addStats'],
+                jobs : ['addClass', 'addStats', 'addPortrait'],
 
                 data : {
                     id: null,
                     meta:{
                         charType: 'enemy',
-                        class : 'warrior'
+                        class : 'null'
                     },
                     portrait : null,
                     stats:{
-                        hp: 50,
-                        str: 50
+                        hp: 'null',
+                        str: 'null'
                     }
                 }
             });

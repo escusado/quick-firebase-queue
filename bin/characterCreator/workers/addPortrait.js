@@ -19,13 +19,14 @@ self.on('end', function() {
 });
 
 
-var addPortrait = function(){
-    charData.data.portrait = 'http://toily.mx/files/'+charData.meta.charType+'-'+Math.floor(Math.random()*2)+'.png';
+var addPortrait = function(charData){
+    charData.data.portrait = charData.data.meta.charType+'-'+Math.floor(Math.random()*2)+'.png';
+
     charData.jobs.shift();
     if(charData.jobs.length === 0){
         charData.status = 'complete';
     }
-        // console.log('addPortrait', charData.jobs);
+
     myFirebaseRef.child(charData.id).update(charData, function(snap){
         process.exit(0);
     });

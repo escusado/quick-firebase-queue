@@ -13,14 +13,11 @@ Class('Character').inherits(Widget)({
 
             this.portraitEl = this.element.find('img.portrait');
             this.dataContainerEl = this.element.find('.data-container');
-            // this.charTypeEl = this.element.find('.chartype');
-            // this.nameEl     = this.element.find('.name');
-            // this.ageEl      = this.element.find('.age');
-            // this.classEl    = this.element.find('.class');
+
         },
 
         update : function(characterData){
-            var content = this._imageTmpl;
+            var content = '';
 
             Object.keys(characterData).forEach(function(key){
                 if(key === 'id'){
@@ -33,14 +30,14 @@ Class('Character').inherits(Widget)({
 
                 content += this.createDataColumnMarkup(key, characterData[key]);
             }, this);
-            this.dataContainerEl.html(content);
+            this.dataContainerEl.html(this._imageTmpl+content);
         },
 
         createDataColumnMarkup : function createDataColumnMarkup(colName, contents){
             var container = '<div class="column data '+colName+'">';
             Object.keys(contents).forEach(function(key){
                 var value = contents[key];
-                container += '<div class="'+key+'"><span>'+key+':</span>'+value+'</div>';
+                container += '<div class="'+key+' '+((value === 'null') ? 'null' : '')+'"><span>'+key+': </span>'+value+'</div>';
 
             }, this);
             container += '</div>';

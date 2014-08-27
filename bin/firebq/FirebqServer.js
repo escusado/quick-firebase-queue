@@ -65,9 +65,9 @@ Class('FirebqServer')({
                 currentJob.status = 'processing';
                 myFirebaseRef.set(this._jobQueue);
                 command = 'echo '+ JSON.stringify(currentJob.state)+'|'+this._workers[currentJob.type];
-                // console.log('--', currentJob.type);
+
                 exec(command, function(error, stdout, stderr){
-                    // console.log('?', error, stdout, stderr);
+                    console.log('worker '+currentJob.type+' done, output: ', error, stdout, stderr);
                     var jobIndex = this._jobQueue.indexOf(currentJob);
                     this._jobQueue.splice(jobIndex, 1);
                     myFirebaseRef.set(this._jobQueue);

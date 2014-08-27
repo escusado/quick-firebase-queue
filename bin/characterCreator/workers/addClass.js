@@ -15,26 +15,27 @@ self.on('readable', function() {
 });
 self.on('end', function() {
     charData = JSON.parse(charData);
-    addStats(charData);
+    addClass(charData);
 });
 
 
-var multipliers = {
-    hero: 10,
-    enemy : 5
+var classes = {
+        hero: [
+            'paladin',
+            'warrior',
+            'mage'
+        ],
+
+        enemy : [
+            'zombie',
+            'ogre',
+            'warlock'
+        ]
 };
 
-var addStats = function(charData){
+var addClass = function(){
+    charData.data.meta.class = classes[charData.data.meta.charType][Math.floor(Math.random()*3)];
 
-    Object.keys(charData.data.stats).forEach(function(key){
-        var value = charData.data.stats[key];
-
-        if(value === 'null'){
-            value = (Math.floor(Math.random()*5)) * 10;
-        }
-
-        charData.data.stats[key] = (value + Math.floor(Math.random()*50)) * (multipliers[charData.data.meta.charType]);
-    });
 
     charData.jobs.shift();
     if(charData.jobs.length === 0){

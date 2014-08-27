@@ -27,7 +27,9 @@ Class('FireBq')({
                     workers : {
                         addName : __dirname+'/../characterCreator/workers/addName.js',
                         addStats : __dirname+'/../characterCreator/workers/addStats.js',
-                        addAge : __dirname+'/../characterCreator/workers/addAge.js'
+                        addAge : __dirname+'/../characterCreator/workers/addAge.js',
+                        addPortrait : __dirname+'/../characterCreator/workers/addPortrait.js',
+                        addClass : __dirname+'/../characterCreator/workers/addClass.js'
                     }
                 }
             );

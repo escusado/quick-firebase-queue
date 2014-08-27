@@ -67,3 +67,7 @@ body{
     width: 40px;
     margin: 5px 5px 0 5px;
 }
+
+.null {
+    color : #999999;
+}
