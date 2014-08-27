@@ -65,7 +65,6 @@ Class('CharacterCreator').includes(CustomEventSupport)({
         },
 
         create : function create(character){
-            console.log('=====');
             var charData = this._characterTypes[character.type].extend({});
 
             charData.id = uuid();

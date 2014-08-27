@@ -22,7 +22,15 @@ Class('FireBq')({
                 this[property] = config[property];
             }, this);
 
-            firebqServer.start();
+            firebqServer.start(
+                {
+                    workers : {
+                        addName : __dirname+'/../characterCreator/workers/addName.js',
+                        addStats : __dirname+'/../characterCreator/workers/addStats.js',
+                        addAge : __dirname+'/../characterCreator/workers/addAge.js'
+                    }
+                }
+            );
 
             return true;
         }

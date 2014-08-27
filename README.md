@@ -149,7 +149,6 @@ A hero is defined when it has all these stats
    *   hp
    *   str
    *   agi
-   *   int
 
 An enemy is defined by these stats:
 *   Class (random 'zombie', 'ogre', 'dragon')
@@ -187,8 +186,52 @@ out until its calculated, this will help to monitor at which state is each chara
 I'm using our in-house toolset to create the front-end character monitor, it's a
 mix of express, socket.io, and some front-end logic to tie them toghether (through socket.io)
 
-The web app is defined
+Anyway the web app streams the creation request through a web-socket to the express app,
+the web server, has an instance of `CharacterCreator` app, that receives this command, as a `type`
+string of the desired type of character.
 
+An empty object defining the character structure is created and stored in a firebase
+databse (because why not ha) ([here](https://github.com/escusado/quick-firebase-queue/blob/ui/bin/characterCreator/index.js#L67)) and given a status
+of pending creation, this is used to know when a character has been completed by its workers.
+
+The app is hooked to a socket event called `character:data` that is fired by the
+`characterCreator` instance every time data is updated in the firebase storage, displaying
+all changes on a single character, and updating ui in real time.
+
+### CharacterCreator
+The character creator app is a simple storage, and data manipulation script, that
+handles character types defined as `json` data and pass this data structure through
+a set of jobs to be manipulated (add data, update data, etc.).
+
+The character creator can hold any type of character that has a `meta`, `portrait`,
+`stats` inside a `data` index they are added using the `addCharacterType` api call.
+
+Also a character has their own creation process defined in the `jobs` array, this one
+holds which jobs and in which order they must be executed:
+
+```javascript
+    this._addCharacterType({
+        jobs : ['addName', 'addStats'],
+
+        data : {
+            id: null,
+            meta:{
+                charType: 'enemy',
+                class : 'warrior'
+            },
+            portrait : null,
+            stats:{
+                hp: 50,
+                str: 50
+            }
+        }
+    });
+```
+
+In this paricular case, the data structure will be passed to the 'addName' worker first
+then to the `addStats` one in that order, until no more jobs are stored there (which would be the `complete` state).
+
+Workers are defined here at server instantiation
 
 
 

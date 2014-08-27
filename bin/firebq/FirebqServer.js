@@ -11,11 +11,7 @@ var clientSocket = null;
 Class('FirebqServer')({
     _jobQueue: [],
 
-    _workers : {
-        addName : __dirname+'/../characterCreator/workers/addName.js',
-        addStats : __dirname+'/../characterCreator/workers/addStats.js',
-        addAge : __dirname+'/../characterCreator/workers/addAge.js'
-    },
+    _workers : {},
 
     config : function config(config){
         this.config = config;
@@ -23,11 +19,13 @@ Class('FirebqServer')({
         return this;
     },
 
-    start : function start(){
+    start : function start(config){
         var firebqServer = this,
             counter = 0,
             data = '',
             server = net.createServer();
+
+        this._workers = config.workers;
 
         server.listen(firebqServer.config.port, 'localhost');
         console.log('Firebq server listening...');
