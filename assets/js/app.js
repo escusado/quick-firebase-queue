@@ -21,8 +21,10 @@ Class('App').inherits(Widget)({
             this.socket.emit('new:character', ev.target.dataset);
         },
 
-        _handleCharacterData : function _handleCharacterData(data){
-            this.charactersList.update(data);
+        _handleCharacterData : function _handleCharacterData(ev){
+            console.log('>>>', ev);
+            ev.data.id = ev.id;
+            this.charactersList.update(ev.data);
         }
     }
 });

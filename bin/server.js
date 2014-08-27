@@ -16,6 +16,8 @@ var express = require('express'),
 
     characterCreatorInstance = require('./characterCreator');
 
+require('./firebq');
+
 //Application
 Class('Server')({
     prototype : {
@@ -65,7 +67,7 @@ Class('Server')({
 
         _bindEvents : function _bindEvents(){
             characterCreatorInstance.bind('character:data', function(characterData){
-                 io.sockets.emit('character:data', characterData);
+                io.sockets.emit('character:data', characterData);
             });
         },
 
@@ -78,6 +80,21 @@ Class('Server')({
             console.log('http://localhost:'+serverPort.toString());
             server.listen(serverPort);
         }
+    }
+});
+
+Object.defineProperty(Object.prototype, "extend", {
+    enumerable: false,
+    value: function(from) {
+        var props = Object.getOwnPropertyNames(from);
+        var dest = this;
+        props.forEach(function(name) {
+            if (name in dest) {
+                var destination = Object.getOwnPropertyDescriptor(from, name);
+                Object.defineProperty(dest, name, destination);
+            }
+        });
+        return this;
     }
 });
 

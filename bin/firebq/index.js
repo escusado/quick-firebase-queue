@@ -4,10 +4,9 @@ var fs = require('fs');
 
 //Config
 var serverPort = 3000,
-    boriumConf = JSON.parse(fs.readFileSync(__dirname+'/borium-conf.json'));
+    boriumConf = JSON.parse(fs.readFileSync(__dirname+'/../borium-conf.json'));
 
-var firebqClient = require('./vendor/BoriumClient.js').Borium.config(boriumConf);
-    firebqServer = require('./FirebqServer.js').FirebqServer.config(boriumConf);
+var firebqServer = require('./FirebqServer.js').FirebqServer.config(boriumConf);
 
 require('neon'); //Class syntax sugar DSL
 

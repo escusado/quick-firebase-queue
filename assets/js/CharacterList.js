@@ -9,10 +9,10 @@ Class('CharacterList').inherits(Widget)({
         },
 
         update : function update(characterData){
+            console.log('ttttt:', characterData);
             if(!this._characters[characterData.id]){
                 this._characters[characterData.id] = new Character();
-                this._characters[characterData.id].render(this.element);
-                console.log('>>>>>', this._characters[characterData.id]);
+                this.element.prepend(this._characters[characterData.id].element);
             }
 
             this._characters[characterData.id].update(characterData);

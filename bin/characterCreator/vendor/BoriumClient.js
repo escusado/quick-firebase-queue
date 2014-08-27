@@ -14,7 +14,7 @@ Class('Borium')({
     },
 
     put : function(type, job, callback){
-        this._request('put:' + type + ':' + job, callback);
+        this._request(type + '|' + job, callback);
     },
 
     _request : function(query, callback){
@@ -28,7 +28,6 @@ Class('Borium')({
         });
 
         socket.on('connect', function(){
-            console.log('>>>>>');
             socket.write(query);
             socket.end();
         });
@@ -42,7 +41,6 @@ Class('Borium')({
             } catch(err) {
                 console.log(err);
             }
-
             callback(jsonData);
         });
 

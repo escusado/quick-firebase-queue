@@ -33,7 +33,7 @@ body{
     box-shadow: inset 0 0 0 2px rgba(0,0,0,.5);
 }
 
-.new-character[data-type="enemy"]{
+.new-character[data-chartype="enemy"]{
     background-color: #D90048;
 }
 
@@ -44,13 +44,26 @@ body{
 .character{
     margin-top: 5px;
     height: 50px;
+    width: 300px;
 
-
-    font-size: 8px;
+    font-size: 9px;
     border-radius: 3px;
     box-shadow: inset 0 0 0 1px rgba(0,0,0,.5);
 }
 
-.label{
+.data{
+    padding-top: 3px;
+}
+
+.character span{
     font-weight: bold;
+}
+
+.portrait{
+
+}
+
+.portrait img{
+    width: 40px;
+    margin: 5px 5px 0 5px;
 }
