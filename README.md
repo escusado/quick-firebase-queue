@@ -48,10 +48,14 @@ localhost:3000
 ```
 
 Click the creation buttons
+
 ![](http://f.cl.ly/items/2t423b3d1I2s452k2l3j/Image%202014-08-27%20at%209.12.07%20AM.png)
 
-Watch the characters been created
+Watch the characters been created by worker tasks:
+
 ![](http://f.cl.ly/items/2i3V3v2Q3Y0U2Q1x0q0F/Image%202014-08-27%20at%209.13.12%20AM.png)
+
+---
 
 ## The Problem
 
@@ -84,7 +88,48 @@ order to keep track of every job and its stages.
 *   A job can have a state object.
 *   The workers are by nature async.
 
+## Functional Spec
 
+### Theory of operation
+
+The firebq queue system is written in javascript using borium.js spec as a guide
+to implement a firebase based solution.
+
+The system is composed by a server and clients scripts, the client can post jobs
+to the manager to be taken care by an specific worker, this lets us queue different
+type of workers to handle an specific state of the data.
+
+### Components
+
+#### The server
+
+Firebq server (located at: `/bin/firebq`) it's a neon class script that starts a
+nomal net socket for its IPC API so workers can be moved away to another machine.
+
+Clients send their desired job in text form as:
+```
+jobName|"{data: stringified json state object}""
+```
+
+The server puts it in a firebase based storage, triggering a data change binding
+that pulls new jobs and assigns the correct type of worker.
+
+The server looks every time for `'wating'` state, and executes the correct worker for it
+and pass the state object in a piped fashion ([this is happening here](https://github.com/escusado/quick-firebase-queue/blob/ui/bin/firebq/FirebqServer.js#L66));
+
+#### The workers
+
+> The case study workers are located at /bin/characterCreator/workers
+> Note:
+> For this particular case, I found easies to make the workers act directly into the
+> character data storage, this triggers the natural firebase binding cycle, that
+> the `character creator app` is already binded to.
+
+A worker is a command-callable script that can receive piped json data in string
+form ([here](https://github.com/escusado/quick-firebase-queue/blob/ui/bin/characterCreator/index.js#L94)).
+
+It must process and executes its job and then exit gracefully so the server can know
+when te task has ended.
 
 ---
 # Proposed study case
@@ -143,3 +188,8 @@ I'm using our in-house toolset to create the front-end character monitor, it's a
 mix of express, socket.io, and some front-end logic to tie them toghether (through socket.io)
 
 The web app is defined
+
+
+
+
+

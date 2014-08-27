@@ -76,10 +76,6 @@ Class('CharacterCreator').includes(CustomEventSupport)({
             myFirebaseRef.set(this._charactersStorage);
         },
 
-        _getRandomInt : function _getRandomInt(rand) {
-           return Math.floor(Math.random()*rand);
-        },
-
         _bindEvents : function _bindEvents(){
             myFirebaseRef.on('value', this._checkForPendingCharacters.bind(this));
             myFirebaseRef.on('child_changed', this._notifyUpdate.bind(this));
