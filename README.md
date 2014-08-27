@@ -32,7 +32,7 @@ order to keep track of every job and its stages.
 
 ## Assumptions
 
-*   The workers can be written in any language. (I'm **assuming python, ruby & javascript**).
+<!-- *   The workers can be written in any language. (I'm **assuming python, ruby & javascript**). -->
 *   The jobs can be described as json objects.
 *   The jobs are a combination of:
     *   file manipulations (crud)
@@ -41,27 +41,58 @@ order to keep track of every job and its stages.
 *   A job can have a state object.
 *   The workers are by nature async.
 
+
+
 ---
+# Proposed study case
 
-## Constrained solution
+Imaginary RPG style game, that needs some procedural character creation.
 
+For this example we need to create 2 types of characters:
+*   Hero
+*   Enemy
 
+A hero is defined when it has all these stats
+*   Name (get from web service)
+*   Age  (assign random based on 'hero' or 'enemy' type)
+*   Portrait (get an image from web service)
+*   Class (random 'Warrior', 'Mage', 'Thief')
+*   Stats (assign based on Class type)
+   *   hp
+   *   str
+   *   agi
+   *   int
 
+An enemy is defined by these stats:
+*   Class (random 'zombie', 'ogre', 'dragon')
+*   Portrait (get an image from web service)
+*   Stats (assign based on Class type)
+   *   hp
 
+The final output will be a list of heroes and enemies with their calculated data
+assigned.
 
+## Character creator abstract
 
+The idea behind the excercise is to create a worker for each type of stat to calculate.
+As some of them depend on previous calculations they must be run in order.
 
+The interaction with the system will be throuhg a simple web-interface that will let
+*   Create heroes or enemies
+*   Monitor the creation status
 
+# Character Creator Functional Spec
 
-In this case a job can be defined as the composition of a state object:
+Our simple character creator runs a simple web interface to send character
+creation requests and to monitor de sequential stages for each stat.
 
-```javascript
-{
-    state : 'state-name',
-    data : {
-        arbitrary: 'values'
-    }
-}
-```
+!()[http://f.cl.ly/items/1r1n041O3T081D0y1D0s/Image%202014-08-26%20at%209.10.00%20AM.png]
 
-That contains the name for the current state of the object and the current data
+The buttons at the top, will trigger the creation process, each stat will be grayed
+out until its calculated, this will help to monitor at which state is each character
+
+## Components & theory of operation.
+
+The character creator system will use FireBQ to handle the character creation
+process.
+
