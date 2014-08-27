@@ -1,24 +1,28 @@
 Class('App').inherits(Widget)({
     prototype : {
-        init : function(config){
+        init : function init(config){
             Widget.prototype.init.call(this, config);
 
+            this.newCharEl = this.element.find('.new-character');
+
+            this.charactersList = new CharacterList();
+            this.charactersList.render(this.element.find('.characters-list-wrapper'));
+
             this._bindEvents();
-
-            console.log('Send socket req...');
-            this.socket.emit('client:hello', {
-                message: 'sup!'
-            });
-
-            return;
         },
 
-        _bindEvents : function(){
-            this.socket.on('server:echo', this._handleEcho.bind(this));
+        _bindEvents : function _bindEvents(){
+            this.newCharEl.bind('click', this._requestNewCharacter.bind(this));
+
+            this.socket.on('character:data', this._handleCharacterData.bind(this));
         },
 
-        _handleEcho : function(data){
-            console.log(data.message);
+        _requestNewCharacter : function _requestNewCharacter(ev){
+            this.socket.emit('new:character', ev.target.dataset);
+        },
+
+        _handleCharacterData : function _handleCharacterData(data){
+            this.charactersList.update(data);
         }
     }
 });
@@ -26,6 +30,7 @@ Class('App').inherits(Widget)({
 $(document).ready(function(){
     var socket = io.connect();
     window.app = new App({
+        element: $('.wrapper'),
         socket : socket
     });
 });

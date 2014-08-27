@@ -1,5 +1,56 @@
+a{
+    text-decoration: none;
+}
+
 body{
     font-family: Tahoma, Geneva, sans-serif;
+    color: #333;
+}
+
+.header{
+    height: 60px;
+
+    background-color: #333333;
+}
+
+.new-character {
+    padding: 10px;
+    margin: 10px;
+    float: left;
+
+    font-weight: bold;
     color: #FFFFFF;
-    background-color: #FF0C17;
+    background-color: #84D900;
+
+    border-radius: 3px;
+}
+
+.new-character:hover{
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,.5);
+}
+
+.new-character:active{
+    box-shadow: inset 0 0 0 2px rgba(0,0,0,.5);
+}
+
+.new-character[data-type="enemy"]{
+    background-color: #D90048;
+}
+
+.character-list{
+
+}
+
+.character{
+    margin-top: 5px;
+    height: 50px;
+
+
+    font-size: 8px;
+    border-radius: 3px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.5);
+}
+
+.label{
+    font-weight: bold;
 }
