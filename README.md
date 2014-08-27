@@ -6,9 +6,10 @@ dashboard monitor.
 
 It's been created using
 
-*   neon.js
-*   borium
 *   firebase (for job storage)
+*   neon.js
+*   borium.js
+*   elastic.js
 
 ## The Problem
 
@@ -86,13 +87,22 @@ The interaction with the system will be throuhg a simple web-interface that will
 Our simple character creator runs a simple web interface to send character
 creation requests and to monitor de sequential stages for each stat.
 
-!()[http://f.cl.ly/items/1r1n041O3T081D0y1D0s/Image%202014-08-26%20at%209.10.00%20AM.png]
+![](http://f.cl.ly/items/1r1n041O3T081D0y1D0s/Image%202014-08-26%20at%209.10.00%20AM.png)
 
 The buttons at the top, will trigger the creation process, each stat will be grayed
 out until its calculated, this will help to monitor at which state is each character
 
 ## Components & theory of operation.
 
-The character creator system will use FireBQ to handle the character creation
-process.
+> Note:
+> I'm using our set of our opensource inhouse tools, to get things working faster
+> In particular I'm using [neon.js](http://azendal.github.io/neon/) which is just syntax sugar
+> for creating oop like organization.
+> Also the queue system is based on [borium](http://getborium.com/) which is our queue system
+> I used the same API just rewrote the server and workers to use firebase as the
+> data meeting point.
 
+### The web-app
+
+I'm using our in-house toolset to create the front-end character monitor, it's a
+mix
