@@ -10,6 +10,48 @@ It's been created using
 *   neon.js
 *   borium.js
 *   elastic.js
+*   widget.js
+
+> Note:
+> I'm using our set of our opensource inhouse tools, to get things working faster
+> In particular I'm using [neon.js](http://azendal.github.io/neon/) which is just syntax sugar
+> for creating oop like organization.
+> Also the queue system is based on [borium](http://getborium.com/) which is our queue system
+> I used the same API just rewrote the server and workers to use firebase as the
+> data meeting point.
+
+## Quick usage
+clone the repo
+
+```javascript
+git clone git@github.com:escusado/quick-firebase-queue.git
+```
+
+install dependencies
+```javascript
+npm install
+```
+
+cd into theproject repo
+```javascript
+cd quick-firebase-queue
+```
+
+start the server
+```javascript
+node bin/server.js
+```
+
+point your browser
+```
+localhost:3000
+```
+
+Click the creation buttons
+![](http://f.cl.ly/items/2t423b3d1I2s452k2l3j/Image%202014-08-27%20at%209.12.07%20AM.png)
+
+Watch the characters been created
+![](http://f.cl.ly/items/2i3V3v2Q3Y0U2Q1x0q0F/Image%202014-08-27%20at%209.13.12%20AM.png)
 
 ## The Problem
 
@@ -94,15 +136,10 @@ out until its calculated, this will help to monitor at which state is each chara
 
 ## Components & theory of operation.
 
-> Note:
-> I'm using our set of our opensource inhouse tools, to get things working faster
-> In particular I'm using [neon.js](http://azendal.github.io/neon/) which is just syntax sugar
-> for creating oop like organization.
-> Also the queue system is based on [borium](http://getborium.com/) which is our queue system
-> I used the same API just rewrote the server and workers to use firebase as the
-> data meeting point.
 
 ### The web-app
 
 I'm using our in-house toolset to create the front-end character monitor, it's a
-mix
+mix of express, socket.io, and some front-end logic to tie them toghether (through socket.io)
+
+The web app is defined
