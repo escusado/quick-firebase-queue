@@ -39,6 +39,8 @@ var addStats = function(charData){
     charData.jobs.shift();
     if(charData.jobs.length === 0){
         charData.status = 'complete';
+    }else{
+        charData.status = 'waiting';
     }
 
     setTimeout(function(){

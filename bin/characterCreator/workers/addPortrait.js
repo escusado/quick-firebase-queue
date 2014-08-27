@@ -20,14 +20,18 @@ self.on('end', function() {
 
 
 var addPortrait = function(charData){
-    charData.data.portrait = charData.data.meta.charType+'-'+Math.floor(Math.random()*2)+'.png';
+    charData.data.portrait = charData.data.meta.charType+'-'+Math.floor(Math.random()*3)+'.png';
 
     charData.jobs.shift();
     if(charData.jobs.length === 0){
         charData.status = 'complete';
+    }else{
+        charData.status = 'waiting';
     }
 
-    myFirebaseRef.child(charData.id).update(charData, function(snap){
-        process.exit(0);
-    });
+    setTimeout(function(){
+        myFirebaseRef.child(charData.id).update(charData, function(snap){
+            process.exit(0);
+        });
+    }, (Math.floor(Math.random()*3)) * 1000);
 };

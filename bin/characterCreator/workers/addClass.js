@@ -33,13 +33,15 @@ var classes = {
         ]
 };
 
-var addClass = function(){
+var addClass = function(charData){
     charData.data.meta.class = classes[charData.data.meta.charType][Math.floor(Math.random()*3)];
 
 
     charData.jobs.shift();
     if(charData.jobs.length === 0){
         charData.status = 'complete';
+    }else{
+        charData.status = 'waiting';
     }
 
     setTimeout(function(){

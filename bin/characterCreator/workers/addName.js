@@ -67,13 +67,15 @@ var names = {
         ]
 };
 
-var addName = function(){
+var addName = function(charData){
     charData.data.meta.name = names[charData.data.meta.charType][Math.floor(Math.random()*20)];
 
 
     charData.jobs.shift();
     if(charData.jobs.length === 0){
         charData.status = 'complete';
+    }else{
+        charData.status = 'waiting';
     }
 
     setTimeout(function(){

@@ -19,13 +19,15 @@ self.on('end', function() {
 });
 
 
-var addAge = function(){
+var addAge = function(charData){
     charData.data.meta.age = Math.floor(Math.random()*500);
 
 
     charData.jobs.shift();
     if(charData.jobs.length === 0){
         charData.status = 'complete';
+    }else{
+        charData.status = 'waiting';
     }
 
     setTimeout(function(){

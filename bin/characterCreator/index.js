@@ -90,7 +90,9 @@ Class('CharacterCreator').includes(CustomEventSupport)({
                     var charData = this._charactersStorage[key];
                     // console.log('====', charData);
                     if(charData.status === 'waiting'){
-                        firebqClient.put(charData.jobs[0], JSON.stringify(charData));
+                        this._charactersStorage[key].status = 'processing';
+                        myFirebaseRef.set(this._charactersStorage);
+                        firebqClient.put(charData.jobs[0], JSON.stringify(this._charactersStorage[key]));
                     }
                 }, this);
 
@@ -98,7 +100,6 @@ Class('CharacterCreator').includes(CustomEventSupport)({
         },
 
         _notifyUpdate : function _notifyUpdate(snapshot){
-            // console.log('>>>>', snapshot.val());
             this.dispatch('character:data', snapshot.val());
         }
     }
