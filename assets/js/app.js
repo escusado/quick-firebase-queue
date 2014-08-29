@@ -1,30 +1,27 @@
 Class('App').inherits(Widget)({
     prototype : {
-        init : function init(config){
+        init : function(config){
             Widget.prototype.init.call(this, config);
 
-            this.newCharEl = this.element.find('.new-character');
-
-            this.charactersList = new CharacterList();
-            this.charactersList.render(this.element.find('.characters-list-wrapper'));
-
             this._bindEvents();
+
+            // console.log('Send socket req...');
+            // this.socket.emit('client:hello', {
+            //     message: 'sup!'
+            // });
+
+            this.droneSimulator = new DroneSimulator();
+            this.droneSimulator.render(this.element);
+
+            return;
         },
 
-        _bindEvents : function _bindEvents(){
-            this.newCharEl.bind('click', this._requestNewCharacter.bind(this));
-
-            this.socket.on('character:data', this._handleCharacterData.bind(this));
+        _bindEvents : function(){
+            this.socket.on('server:echo', this._handleEcho.bind(this));
         },
 
-        _requestNewCharacter : function _requestNewCharacter(ev){
-            this.socket.emit('new:character', ev.target.dataset);
-        },
-
-        _handleCharacterData : function _handleCharacterData(ev){
-            console.log('>>>', ev);
-            ev.data.id = ev.id;
-            this.charactersList.update(ev.data);
+        _handleEcho : function(data){
+            console.log(data.message);
         }
     }
 });
@@ -32,7 +29,7 @@ Class('App').inherits(Widget)({
 $(document).ready(function(){
     var socket = io.connect();
     window.app = new App({
-        element: $('.wrapper'),
+        element : $('.wrapper'),
         socket : socket
     });
 });

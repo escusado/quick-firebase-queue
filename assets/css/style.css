@@ -1,73 +1,29 @@
+body{
+    font-family: Tahoma, Geneva, sans-serif;
+    color: #333333;
+}
+
 a{
     text-decoration: none;
 }
 
-body{
-    font-family: Tahoma, Geneva, sans-serif;
-    color: #333;
-}
-
-.header{
-    height: 60px;
-
+.controls{
     background-color: #333333;
+    height: 50px;
 }
 
-.new-character {
-    padding: 10px;
-    margin: 10px;
-    float: left;
-
+.launch{
+    padding: 5px;
+    background-color: #7AA62B;
     font-weight: bold;
     color: #FFFFFF;
-    background-color: #84D900;
-
-    border-radius: 3px;
+    box-shadow: inset 0 0 0 1 rgba(255,255,255,.2);
 }
 
-.new-character:hover{
-    box-shadow: inset 0 0 0 2px rgba(255,255,255,.5);
+.launch:hover{
+    box-shadow: inset 0 0 0 1 rgba(255,255,255,.5);
 }
 
-.new-character:active{
-    box-shadow: inset 0 0 0 2px rgba(0,0,0,.5);
-}
-
-.new-character[data-chartype="enemy"]{
-    background-color: #D90048;
-}
-
-.character-list{
-
-}
-
-.character{
-    margin-top: 5px;
-    height: 50px;
-    width: 300px;
-
-    font-size: 9px;
-    border-radius: 3px;
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,.5);
-}
-
-.data{
-    padding-top: 3px;
-}
-
-.character span{
-    font-weight: bold;
-}
-
-.portrait{
-
-}
-
-.portrait img{
-    width: 40px;
-    margin: 5px 5px 0 5px;
-}
-
-.null {
-    color : #999999;
+.launch:active{
+    box-shadow: inset 0 0 0 1 rgba(0,0,0,.5);
 }
