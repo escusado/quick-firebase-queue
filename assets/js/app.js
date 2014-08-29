@@ -5,11 +5,6 @@ Class('App').inherits(Widget)({
 
             this._bindEvents();
 
-            // console.log('Send socket req...');
-            // this.socket.emit('client:hello', {
-            //     message: 'sup!'
-            // });
-
             this.droneSimulator = new DroneSimulator();
             this.droneSimulator.render(this.element);
 

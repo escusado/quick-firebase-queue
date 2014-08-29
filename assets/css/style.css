@@ -7,23 +7,74 @@ a{
     text-decoration: none;
 }
 
+/*simulator*/
+
+.drone-simulator{
+    min-width: 550px;
+}
+
 .controls{
     background-color: #333333;
-    height: 50px;
+    height: 30px;
+    padding-top: 12px;
 }
 
 .launch{
     padding: 5px;
+    margin-left: 10px;
+
     background-color: #7AA62B;
     font-weight: bold;
     color: #FFFFFF;
-    box-shadow: inset 0 0 0 1 rgba(255,255,255,.2);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.2);
 }
 
 .launch:hover{
-    box-shadow: inset 0 0 0 1 rgba(255,255,255,.5);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.5);
 }
 
 .launch:active{
-    box-shadow: inset 0 0 0 1 rgba(0,0,0,.5);
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.5);
+}
+
+/*Map*/
+
+.map{
+    margin: 10px auto;
+
+    background: #CFCFCF;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.5);
+}
+
+.map-cell{
+    float: left;
+
+    background-color: green;
+    box-shadow: inset 1px 1px 0 rgba(0,0,0,.5);
+}
+
+.map-cell.picture-taken{
+    background-color: blue;
+}
+
+/*Drones*/
+.drone-station{
+    float: left;
+    margin-left: 2px;
+    width: 22px;
+    height: 22px;
+    position: relative;
+
+    background-color: #94BBCF;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.5);
+}
+
+.drone{
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 22px;
+    height: 22px;
+    background: transparent url(/assets/img/drone.png);
 }
