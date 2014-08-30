@@ -2,15 +2,19 @@ Class('DroneSimulator').inherits(Widget)({
     ELEMENT_CLASS : 'column fixed drone-simulator',
     HTML: '<div>\
         <div class="controls">\
-            <div class="drone-stations"></div>\
-            <a href="javascript:void(0);" class="launch">Launch</a>\
+            <a href="javascript:void(0);" class="button launch">Launch</a>\
+            <a href="javascript:void(0);" class="button reset hidden">Reset</a>\
+            <div class="stations-container">\
+                <div class="drone-stations"></div>\
+            </div>\
+            <div class="clearfix"></div>\
         </div>\
     </div>',
 
     prototype : {
 
         _desiredDrones: 1,
-        _picturesPerStation: 5,
+        _picturesPerStation: 3,
         _droneStations: [],
 
         init : function(config){
@@ -18,6 +22,7 @@ Class('DroneSimulator').inherits(Widget)({
             Widget.prototype.init.call(this, config);
 
             this.launchEl = this.element.find('.launch');
+            this.resetEl = this.element.find('.reset');
             this.baseMapEl = this.element.find('.base');
             this.dataMapEl = this.element.find('.data');
             this.droneStationsEl = this.element.find('.drone-stations');
@@ -37,11 +42,24 @@ Class('DroneSimulator').inherits(Widget)({
         },
 
         _bindEvents : function _bindEvents(){
-            this.launchEl.click(this._deployDrones.bind(this));
+            this.launchEl.click(this._handleLaunch.bind(this));
+            this.resetEl.click(this._handleReset.bind(this));
 
             this._droneStations.forEach(function(droneStation){
                 droneStation.bind('batch:complete', this._deployDrones.bind(this));
             }, this);
+        },
+
+        _handleLaunch : function _handleLaunch(){
+            this.launchEl.toggle();
+            this.resetEl.toggle();
+            this._deployDrones();
+        },
+
+        _handleReset : function _handleReset(){
+            this.launchEl.toggle();
+            this.resetEl.toggle();
+            this.map.reset();
         },
 
         _deployDrones : function _deployDrones(){
@@ -49,9 +67,10 @@ Class('DroneSimulator').inherits(Widget)({
 
             this._droneStations.forEach(function(droneStation){
                 if(droneStation.status === 'waiting'){
-                    debugger
                     batchForDrone = this.map.getPendingCellMaps(this._picturesPerStation);
-                    droneStation.deployDrone(batchForDrone);
+                    if(batchForDrone){
+                        droneStation.deployDrone(batchForDrone);
+                    }
                 }
             }, this);
         }

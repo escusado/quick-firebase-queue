@@ -20,6 +20,11 @@ Class('MapCell').inherits(Widget)({
 
         takePicture : function takePicture(){
             this.element.addClass('picture-taken');
+        },
+
+        reset : function reset(){
+            this.element.removeClass('picture-taken');
+            this.status = 'waiting';
         }
     }
 });

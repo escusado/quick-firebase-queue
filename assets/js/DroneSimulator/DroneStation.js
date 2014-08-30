@@ -22,20 +22,13 @@ Class('DroneStation').inherits(Widget)({
         },
 
         deployDrone : function deployDrone(mapCells){
-            var targetMapCells = [];
-
             this.status = 'deployed';
-
-            mapCells.forEach(function(mapCell){
-                 targetMapCells.push(mapCell);
-            });
-
-            this.drone.deploy(targetMapCells);
+            this.drone.deploy(mapCells);
         },
 
         _handleDroneData : function _handleDroneData(ev){
             this.status = 'waiting';
-            this.dispatch('batch:complete');
+            this.dispatch('batch:complete', ev.data);
         }
     }
 });

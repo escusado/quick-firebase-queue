@@ -1,14 +1,17 @@
 Class('Map').inherits(Widget)({
     ELEMENT_CLASS: 'map',
+    HTML : '<div> <div class="map-cells"></div> </div>',
     prototype : {
 
         _mapSize: {w: 520, h: 290},
-        _horizontalCellQuantity: 13,
+        _horizontalCellQuantity: 50,
         _mapCells: {},
         myFirebaseRef: null,
 
         init : function init(config){
             Widget.prototype.init.call(this, config);
+
+            this._mapCellsEl = this.element.find('.map-cells');
 
             this._writeMapStyles();
 
@@ -40,14 +43,28 @@ Class('Map').inherits(Widget)({
                             }
                         },
                     });
-                    newCell.render(this.element);
+                    newCell.render(this._mapCellsEl);
                 }
             }
         },
 
         _writeMapStyles : function _writeMapStyles(){
-            this._cellSize = Math.floor(this._mapSize.w / this._horizontalCellQuantity);
-            this.element.append('<style>.map{ width: '+this._mapSize.w+'px; height: '+this._mapSize.h+'px } .map-cell{ width: '+this._cellSize+'px; height: '+this._cellSize+'px }</style>')
+            var mapSizeW = 0,
+                bestHorizontalCellQuantity = 0;
+
+            this._cellSize = Math.ceil(this._mapSize.w / this._horizontalCellQuantity);
+
+            //re evaluate cell quty becasue of size issues
+            while(mapSizeW < this._mapSize.w){
+                bestHorizontalCellQuantity+=1;
+                mapSizeW = bestHorizontalCellQuantity * this._cellSize;
+            console.log('>', mapSize);
+            }
+
+            mapSize = (bestHorizontalCellQuantity+1) * this._cellSize;
+            this._horizontalCellQuantity = bestHorizontalCellQuantity+1;
+
+            this.element.append('<style> .map-cells{ width: '+mapSize+'px } .map{ width: '+this._mapSize.w+'px; height: '+this._mapSize.h+'px } .map-cell{ width: '+this._cellSize+'px; height: '+this._cellSize+'px }</style>')
         },
 
         getPendingCellMaps : function getPendingCellMaps(picturesQuantity){
@@ -62,7 +79,18 @@ Class('Map').inherits(Widget)({
                 }
             }, this);
 
+            if(batchForStation.length === 0){
+                batchForStation = null;
+            }
+
             return batchForStation;
+        },
+
+        reset : function reset(){
+            Object.keys(this._mapCells).forEach(function(cellId){
+                var mapCell = this._mapCells[cellId];
+                mapCell.reset();
+            }, this);
         }
     }
 });

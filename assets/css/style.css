@@ -1,3 +1,7 @@
+html{
+    background-color: #EEEEEE;
+}
+
 body{
     font-family: Tahoma, Geneva, sans-serif;
     color: #333333;
@@ -7,6 +11,14 @@ a{
     text-decoration: none;
 }
 
+.clearfix{
+    clear: both;
+}
+
+.hidden{
+    display: none;
+}
+
 /*simulator*/
 
 .drone-simulator{
@@ -14,26 +26,33 @@ a{
 }
 
 .controls{
-    background-color: #333333;
-    height: 30px;
-    padding-top: 12px;
+    background-color: #555555;
+    padding: 12px 0 12px 0;
+    box-shadow:inset 0 -2px 0 0 rgba(0,0,0,.5)
 }
 
-.launch{
+.button{
     padding: 5px;
-    margin-left: 10px;
+    margin: 0 10px;
 
-    background-color: #7AA62B;
     font-weight: bold;
     color: #FFFFFF;
     box-shadow: inset 0 0 0 1px rgba(255,255,255,.2);
 }
 
-.launch:hover{
+.launch{
+    background-color: #7AA62B;
+}
+
+.reset{
+    background-color: #428BCA;
+}
+
+.button:hover{
     box-shadow: inset 0 0 0 1px rgba(255,255,255,.5);
 }
 
-.launch:active{
+.button:active{
     box-shadow: inset 0 0 0 1px rgba(0,0,0,.5);
 }
 
@@ -41,23 +60,28 @@ a{
 
 .map{
     margin: 10px auto;
+    overflow: hidden;
 
-    background: #CFCFCF;
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,.5);
+    background: #CFCFCF url(/assets/img/maps/base.png) no-repeat;
+    box-shadow: inset 0 0 0 2px rgba(0,0,0,.8);
 }
 
 .map-cell{
     float: left;
 
-    background-color: green;
-    box-shadow: inset 1px 1px 0 rgba(0,0,0,.5);
+    box-shadow: 0 0 0 1px rgba(0,0,0,.05);
 }
 
 .map-cell.picture-taken{
-    background-color: blue;
+    background: rgba(0,0,0,.3) url(/assets/img/camera.png) no-repeat 50% 50%;
 }
 
 /*Drones*/
+.stations-container{
+    margin: 15px 0 0 10px;
+    padding-left: 300px;
+}
+
 .drone-station{
     float: left;
     margin-left: 2px;
@@ -65,8 +89,9 @@ a{
     height: 22px;
     position: relative;
 
-    background-color: #94BBCF;
-    box-shadow: 0 0 0 1px rgba(0,0,0,.5);
+    background-color: #F0AD4E;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.5);
+    border-radius: 3px;
 }
 
 .drone{
