@@ -14,7 +14,7 @@ Class('Drone').inherits(Widget)({
         init : function(config){
             Widget.prototype.init.call(this, config);
             this._speed = Math.floor(Math.random() * 500) + 100;
-            this._speed = 1000;
+            // this._speed = 1000;
         },
 
         deploy : function deploy(config){
@@ -69,7 +69,6 @@ Class('Drone').inherits(Widget)({
 
             this._currentCellMap.takePicture();
 
-
             //set next destination
             this._gatheredMapCells.push(this._currentCellMap);
 
@@ -85,43 +84,3 @@ Class('Drone').inherits(Widget)({
 
     }
 });
-
-
-
-
-
-        // _goToNextPoint : function _goToNextPoint(){
-        //     debugger
-        //     var nextDestination;
-
-        //     if(this._currentCellMap){
-        //         this._previousCellMap = this._currentCellMap;
-        //     }
-
-        //     if(this._targetMapCells.length === 0){
-        //         nextDestination = this._finalDestination;
-        //     }else{
-        //         this._currentCellMap = this._targetMapCells.pop();
-        //         nextDestination = this._currentCellMap.element.position();
-        //         nextDestination.left = nextDestination.left + ((this._currentCellMap.element.width() - this.element.width())/2);
-        //     }
-
-        //     if(
-        //         this._targetMapCells.length === 0 &&
-        //         this.element.position().top === this._finalDestination.top &&
-        //         this.element.position().left === this._finalDestination.left
-        //       ){
-        //         this.dispatch('drone:returned', this._savedPictures);
-        //         this._previousCellMap.takePicture();
-        //         this._currentCellMap = null;
-        //         this._previousCellMap = null;
-        //         return;
-        //     }
-
-        //     if(this._previousCellMap){
-        //         this._previousCellMap.takePicture();
-        //     }
-
-        //     this.element.animate(nextDestination, 100, this._goToNextPoint.bind(this));
-
-        // }
