@@ -13,7 +13,7 @@ Class('DroneSimulator').inherits(Widget)({
 
     prototype : {
 
-        _desiredDrones: 1,
+        _desiredDrones: 5,
         _picturesPerStation: 3,
         _droneStations: [],
 

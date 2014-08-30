@@ -23,11 +23,19 @@ Class('DroneStation').inherits(Widget)({
 
         deployDrone : function deployDrone(mapCells){
             this.status = 'deployed';
-            this.drone.deploy(mapCells);
+            this.drone.deploy({
+                stationPosition : this.element.position(),
+                mapCells : mapCells
+            });
         },
 
         _handleDroneData : function _handleDroneData(ev){
             this.status = 'waiting';
+
+            ev.data.forEach(function(mapCell){
+                mapCell.setToProcessing();
+            });
+
             this.dispatch('batch:complete', ev.data);
         }
     }

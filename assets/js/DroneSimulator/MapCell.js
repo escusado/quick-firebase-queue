@@ -22,8 +22,15 @@ Class('MapCell').inherits(Widget)({
             this.element.addClass('picture-taken');
         },
 
+        setToProcessing : function setToProcessing(){
+            this.element.addClass('processing');
+            this.element.removeClass('picture-taken');
+        },
+
         reset : function reset(){
             this.element.removeClass('picture-taken');
+            this.element.removeClass('processing');
+
             this.status = 'waiting';
         }
     }

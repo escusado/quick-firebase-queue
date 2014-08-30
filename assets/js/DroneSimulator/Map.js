@@ -24,7 +24,7 @@ Class('Map').inherits(Widget)({
             var row, col, cellId, newCell
                 neededCells = {
                     hor: Math.floor(this._mapSize.w/this._cellSize),
-                    ver: Math.floor(this._mapSize.h/this._cellSize)
+                    ver: Math.floor(this._mapSize.h/this._cellSize)+1
                 };
 
             for(row=0; row<neededCells.ver; row+=1){
@@ -49,29 +49,28 @@ Class('Map').inherits(Widget)({
         },
 
         _writeMapStyles : function _writeMapStyles(){
-            var mapSizeW = 0,
+            var bestMapSize = 0,
                 bestHorizontalCellQuantity = 0;
 
             this._cellSize = Math.ceil(this._mapSize.w / this._horizontalCellQuantity);
 
             //re evaluate cell quty becasue of size issues
-            while(mapSizeW < this._mapSize.w){
+            while(bestMapSize < this._mapSize.w){
                 bestHorizontalCellQuantity+=1;
-                mapSizeW = bestHorizontalCellQuantity * this._cellSize;
-            console.log('>', mapSize);
+                bestMapSize = bestHorizontalCellQuantity * this._cellSize;
             }
 
-            mapSize = (bestHorizontalCellQuantity+1) * this._cellSize;
-            this._horizontalCellQuantity = bestHorizontalCellQuantity+1;
+            this._horizontalCellQuantity = bestHorizontalCellQuantity;
+            this._mapSize.w = bestMapSize;
 
-            this.element.append('<style> .map-cells{ width: '+mapSize+'px } .map{ width: '+this._mapSize.w+'px; height: '+this._mapSize.h+'px } .map-cell{ width: '+this._cellSize+'px; height: '+this._cellSize+'px }</style>')
+            this.element.append('<style> .map-cells{ width: '+bestMapSize+'px } .map{ width: '+this._mapSize.w+'px; height: '+this._mapSize.h+'px } .map-cell{ width: '+this._cellSize+'px; height: '+this._cellSize+'px }</style>')
         },
 
         getPendingCellMaps : function getPendingCellMaps(picturesQuantity){
             var addLocked = false,
                 batchForStation = [];
 
-            Object.keys(this._mapCells).forEach(function(cellId){
+            shuffle(Object.keys(this._mapCells)).forEach(function(cellId){
                 var mapCell = this._mapCells[cellId];
                 if(mapCell.status === 'waiting' && batchForStation.length < picturesQuantity){
                     mapCell.status = 'taken';
@@ -94,3 +93,22 @@ Class('Map').inherits(Widget)({
         }
     }
 });
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex ;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}

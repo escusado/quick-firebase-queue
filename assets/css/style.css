@@ -76,10 +76,13 @@ a{
     background: rgba(0,0,0,.3) url(/assets/img/camera.png) no-repeat 50% 50%;
 }
 
+.map-cell.processing{
+    background: rgba(0,0,0,.3) url(/assets/img/hourglass.png) no-repeat 50% 50%;
+}
+
 /*Drones*/
 .stations-container{
     margin: 15px 0 0 10px;
-    padding-left: 300px;
 }
 
 .drone-station{
@@ -102,4 +105,5 @@ a{
     width: 22px;
     height: 22px;
     background: transparent url(/assets/img/drone.png);
+    z-index: 1;
 }

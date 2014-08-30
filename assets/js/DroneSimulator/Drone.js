@@ -7,27 +7,26 @@ Class('Drone').inherits(Widget)({
         _gatheredMapCells : null,
         _currentCellMap : null,
         _home : {top: 0, left: 0},
-        _stationPosition : null,
+        stationPosition : null,
         _speed : null,
         state: 'waiting',
 
         init : function(config){
             Widget.prototype.init.call(this, config);
             this._speed = Math.floor(Math.random() * 500) + 100;
-            this._speed = 500;
+            this._speed = 1000;
         },
 
-        deploy : function deploy(targetMapCells){
+        deploy : function deploy(config){
             this._currentCellMap = null;
             this._gatheredMapCells = [];
 
-            this._targetMapCells = targetMapCells;
+            this._targetMapCells = config.mapCells;
             this._currentCellMap = this._targetMapCells.pop();
-            this._stationPosition = {
-                top: $('.drone-station').first().position().top  - this._currentCellMap.element.height(),
-                left: $('.drone-station').first().position().left
+            this.stationPosition = {
+                top: config.stationPosition.top,
+                left: config.stationPosition.left
             };
-            console.log('>>>', this._stationPosition);
             this._goToNextPoint();
         },
 
@@ -39,8 +38,8 @@ Class('Drone').inherits(Widget)({
         _getNextDestination : function _getNextDestination(){
             if(this._currentCellMap){
                 var destination = {
-                    top: this._currentCellMap.element.position().top + this._stationPosition.top,
-                    left: this._currentCellMap.element.position().left - this._stationPosition.left
+                    top: this._currentCellMap.element.position().top - this.stationPosition.top,
+                    left: this._currentCellMap.element.position().left - this.stationPosition.left
                 };
 
                 return destination;
@@ -53,12 +52,17 @@ Class('Drone').inherits(Widget)({
             this.element.animate(destination, this._speed, function(ev){
                 this._arrivedToDestination();
             }.bind(this));
+
+            var radians = Math.atan2(this.element.position().left - (destination.left), this.element.position().top - (destination.top));
+            var degree = (radians * (180 / Math.PI) * -1) + 90;
+            this.element.css('-webkit-transform', 'rotate(' + degree + 'deg)');
+
         },
 
         _arrivedToDestination : function _arrivedToDestination(){
             //finished
             if(this._targetMapCells.length === 0 && this.state === 'going-home'){
-                this.dispatch('drone:returned', this._gatheredMapCells);
+                this.dispatch('drone:returned', {data: this._gatheredMapCells});
                 this.state = 'waiting';
                 return;
             }
