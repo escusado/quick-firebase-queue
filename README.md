@@ -9,7 +9,9 @@
       *   job queuing
       *   job succes handling
       *   job error handling
+
 ---
+
 *   **Design a service using Firebase & node.js that can consume jobs in a queue for processing.**
    *   Firebq is a job queue that holds jobs for firebase based workers.
 *   **Use Firebase for the datastore where the queue and actual processed data should live.**
