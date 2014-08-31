@@ -46,7 +46,7 @@ of each cell on the map.
 
 # Requirements:
 
-*   _correctness - The code should perform as specified, edge cases and errors should be handled._
+*   _*correctness - The code should perform as specified, edge cases and errors should be handled.*_
    *   The queue considers workers failing, and report for the error is added if the worker had one.
 *   style - The code should be well written and easy to understand, comments should be added where necessary.
    *   Well thats for the reader to decide :). But the same logic and style is followed on front and back, events and oop is used across async logic actions.
