@@ -1,5 +1,7 @@
 #! /usr/local/bin/node
 
+require('neon');
+
 //Config
 var serverPort = 3000;
 
@@ -11,7 +13,9 @@ var express = require('express'),
     io      = require('socket.io').listen(server),
     fs      = require('fs');
 
-require('neon');
+//app stack
+require('./DroneDataProcessor.js');
+var droneDataProcessor = new DroneDataProcessor();
 
 //Application
 Class('Server')({
@@ -22,10 +26,11 @@ Class('Server')({
             this._setupSockets();
             this._serverStart();
 
+
             return this;
         },
 
-        _configureApp : function(){
+        _configureApp : function _configureApp(){
             //neon
             app.use('/neon', express.static('node_modules/neon'));
 
@@ -42,7 +47,7 @@ Class('Server')({
             return this;
         },
 
-        _setRoutes : function(){
+        _setRoutes : function _setRoutes(){
             app.get('/', function(req, res){
                 res.sendFile('views/index.html', {'root': __dirname + '/..'});
             });
@@ -50,23 +55,24 @@ Class('Server')({
             return this;
         },
 
-        _setupSockets : function(){
+        _setupSockets : function _setupSockets(){
             var server = this;
 
             io.sockets.on('connection', function (socket) {
-                socket.on('client:hello', server._clientHello.bind(this, socket));
+                socket.on('batch:complete', server._handleDroneData.bind(this, socket));
             });
         },
 
-        _clientHello : function(socket, data){
-            data.message = 'Server echo: '+ data.message;
-            socket.emit('server:echo', data);
-        },
-
-        _serverStart : function(){
+        _serverStart : function _serverStart(){
             console.log('Server ready');
             console.log('http://localhost:'+serverPort.toString());
             server.listen(serverPort);
+        },
+
+        _handleDroneData : function _handleDroneData(socket, ev){
+            ev.data.forEach(function(mapCellId){
+                droneDataProcessor.enqueMapCellData(mapCellId);
+            }, this);
         }
     }
 });

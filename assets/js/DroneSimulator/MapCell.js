@@ -45,21 +45,6 @@ Class('MapCell').inherits(Widget)({
         updateData : function updateData(data){
             this.data = data;
             this.updateUi();
-
-            // {
-            //     id: '',
-            //     status: 'processing',
-            //     data : {
-            //         coords : {
-            //             x: 0,
-            //             y: 0
-            //         },
-            //         layers : [
-            //             '/assets/img/maps/sat.png'
-            //         ]
-            //     }
-            // }
-
         },
 
         updateUi : function updateUi(){
@@ -67,21 +52,18 @@ Class('MapCell').inherits(Widget)({
 
             this.element.attr('status', this.status);
 
-            backgrounds = this.data.layers.map(function(background){
-                var x = this.element.width() * this.data.coords.x,
-                    y = this.element.height() * this.data.coords.y;
+            //build background image css value
+            if(this.data.layers && this.data.layers.length > 0){
 
-                console.log('this.element.width(): ', this.element.width());
-                console.log('this.data.coords.x: ', this.data.coords.x);
-                console.log('this.element.height(): ', this.element.height());
-                console.log('this.data.coords.y: ', this.data.coords.y);
+                backgrounds = this.data.layers.map(function(background){
+                    var x = this.element.width() * this.data.coords.x,
+                        y = this.element.height() * this.data.coords.y;
+                    return background.replace('{pos}', '-'+x+'px -'+y+'px');
+                }.bind(this));
 
-                return background.replace('0 0', x+' '+y);
-            }.bind(this));
+                this.element.css('background', backgrounds.join(','));
+            }
 
-            console.log('>>', backgrounds);
-
-            this.element.css('background', backgrounds.join(','));
         }
     }
 });

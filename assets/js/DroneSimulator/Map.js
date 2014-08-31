@@ -4,7 +4,7 @@ Class('Map').inherits(Widget)({
     prototype : {
 
         _mapSize: {w: 520, h: 290},
-        _horizontalCellQuantity: 10,
+        _horizontalCellQuantity: 5,
         _mapCells: {},
         _mapCellsModel: {},
         _returnRandomOrderedCells : true,
@@ -52,7 +52,7 @@ Class('Map').inherits(Widget)({
                         },
                     };
                     this._mapCellsModel[cellId] = newCellRecord;
-                    newCell = this._mapCells[cellId] = new MapCell();
+                    newCell = this._mapCells[cellId] = new MapCell(newCellRecord);
                     newCell.render(this._mapCellsEl);
                 }
             }

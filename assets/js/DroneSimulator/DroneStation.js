@@ -36,7 +36,7 @@ Class('DroneStation').inherits(Widget)({
                 mapCell.setToProcessing();
             });
 
-            this.dispatch('batch:complete', ev.data);
+            this.dispatch('batch:complete', ev);
         }
     }
 });

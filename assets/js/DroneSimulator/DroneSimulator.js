@@ -13,8 +13,8 @@ Class('DroneSimulator').inherits(Widget)({
 
     prototype : {
 
-        _desiredDrones: 3,
-        _picturesPerStation: 3,
+        _desiredDrones: 10,
+        _picturesPerStation: 2,
         _droneStations: [],
 
         init : function(config){
@@ -62,8 +62,13 @@ Class('DroneSimulator').inherits(Widget)({
             this.map.reset();
         },
 
-        _deployDrones : function _deployDrones(){
-            var destinationPoints, batchForDrone;
+        _deployDrones : function _deployDrones(ev){
+            var batchForDrone;
+
+            //send data if any
+            if(ev){
+                this._sendImagesForProcessing(ev.data);
+            }
 
             this._droneStations.forEach(function(droneStation){
                 if(droneStation.status === 'waiting'){
@@ -73,6 +78,17 @@ Class('DroneSimulator').inherits(Widget)({
                     }
                 }
             }, this);
+        },
+
+        _sendImagesForProcessing : function _sendImagesForProcessing(processedMapCells){
+            var processedMapCellIds = [];
+
+            processedMapCells.forEach(function(mapCell){
+                console.log('>', mapCell);
+                processedMapCellIds.push(mapCell.id);
+            });
+
+            app.socket.emit('batch:complete', {data: processedMapCellIds});
         }
     }
 });
