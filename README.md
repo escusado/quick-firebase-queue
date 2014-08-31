@@ -3,7 +3,7 @@
 *   **correctness - The code should perform as specified, edge cases and errors should be handled.**
    *   The queue considers workers failing, and report for the error is added if the worker had one.
 *   **style - The code should be well written and easy to understand, comments should be added where necessary.**
-   *   Well thats for the reader to decide :). But the same logic and style is followed on front and back, events and oop is used across async logic actions.
+   *   Well thats for you to decide :). But the same logic and style is followed on front and back.
 *   **tests - It would be great if there were some test coverage of core logic.**
    *   The drone-simulator, uses all the `firebq` features:
       *   job queuing
@@ -13,9 +13,9 @@
 ---
 
 *   **Design a service using Firebase & node.js that can consume jobs in a queue for processing.**
-   *   Firebq is a job queue that holds jobs for firebase based workers.
+   *   [Firebq](https://github.com/escusado/quick-firebase-queue/tree/visualsim#firebq) is a job queue that holds jobs for firebase based workers.
 *   **Use Firebase for the datastore where the queue and actual processed data should live.**
-   *   The firebq and the drone-simulator storage are on firebase.
+   *   The firebq and the [drone-simulator](https://github.com/escusado/quick-firebase-queue/tree/visualsim#the-idea) storage are on firebase.
 *   **Imagine a service which reads items from a queue, which contain data to indicate what kind of processing they require, that service should then dispatch those queued jobs to workers for processing.**
    *   The Drone simulator app; displays a map and drones gathering data from it, the simulated data analisys happens on independent workers that manipulate the data directly. These workers are executed by `firebq` queue.
 *   **You can simulate the processing by using a timeout and updating a value to emulate a process that takes a bit of time and has an effect.**
@@ -66,6 +66,8 @@ A simple javascript/node job queue for firebase based data workers.
 
 ---
 # A services that consumes jobs in a queue
+
+![Drone sim](http://f.cl.ly/items/1C2B1S2I280E0N0W1s02/Screen%20Shot%202014-08-31%20at%205.36.30%20PM.png)
 
 ## The idea
 

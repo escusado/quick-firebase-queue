@@ -4,7 +4,7 @@ Class('Map').inherits(Widget)({
     prototype : {
 
         _mapSize: {w: 520, h: 290},
-        _horizontalCellQuantity: 5,
+        _horizontalCellQuantity: 10,
         _mapCells: {},
         _mapCellsModel: {},
         _returnRandomOrderedCells : true,
