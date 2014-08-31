@@ -1,49 +1,3 @@
-# Firebq
-
-A simple job queue manager for firebase based workers.
-
-## Abstract
-
-A simple javascript/node job queue for firebase based data workers.
-
-### Constraints
-
-
-
-
-
-# A services that consumes jobs in a queue
-
-## The idea
-
-A Drone simulator, that displays a grid divided map, and drones taking pictures
-of each cell on the map.
-
-### How it works
-
-*   A map is created using the Map class (can be configured here: TODO).
-*   A set of drone stations are placed next to the map (the number of station can be configured here: TODO)
-*   A controller assign a set of unasigned map cells to each drone station.
-*   The station deploys the drone with all the targets for picture taking.
-*   The drone does its job cell map by cell map (the quantity of pictures per drone can be configured here: TODO)
-*   The drone returns to its station to deliver the imagery payload.
-*   The station receives the imagery data and sends it to the app backend for processing
-*   The app backend holds a list of all the processes the images has to go trhough.
-*   The app backend takes each image and queues each process in order.
-
-*   `firebq` queue receives the worker path and the firebase dataset id
-*   The javascript workers receive the id of the dataset they need to process
-*   Each worker knows what to do with the data, when done, they send a `job:done` event to `firebq`
-*   `firebq` removes the job from the queue
-
-*   The map data on the drone-simulator will be updated real-time (thanks firebase)
-*   As data is been added to each cell, the map will be updating on real time.
-
-*   There are 3 stages for each image
-   *   Add sattelite image
-   *   Add a fake heatmap image
-   *   Add a fake could point like data image
-
 # Requirements:
 
 *   **correctness - The code should perform as specified, edge cases and errors should be handled.**
@@ -55,7 +9,7 @@ of each cell on the map.
       *   job queuing
       *   job succes handling
       *   job error handling
-
+---
 *   **Design a service using Firebase & node.js that can consume jobs in a queue for processing.**
    *   Firebq is a job queue that holds jobs for firebase based workers.
 *   **Use Firebase for the datastore where the queue and actual processed data should live.**
@@ -92,3 +46,53 @@ Click Launch.
 
 *   **a way to monitor the queue process and show when jobs are consumed and their states in processing.**
 The app running on `http://localhost:3000/` has a queue monitor on the right.
+
+---
+
+# Firebq
+
+A simple job queue manager for firebase based workers.
+
+## Abstract
+
+A simple javascript/node job queue for firebase based data workers.
+
+### Constraints
+
+
+
+
+---
+# A services that consumes jobs in a queue
+
+## The idea
+
+A Drone simulator, that displays a grid divided map, and drones taking pictures
+of each cell on the map.
+
+### How it works
+
+*   A map is created using the Map class (can be configured here: TODO).
+*   A set of drone stations are placed next to the map (the number of station can be configured here: TODO)
+*   A controller assign a set of unasigned map cells to each drone station.
+*   The station deploys the drone with all the targets for picture taking.
+*   The drone does its job cell map by cell map (the quantity of pictures per drone can be configured here: TODO)
+*   The drone returns to its station to deliver the imagery payload.
+*   The station receives the imagery data and sends it to the app backend for processing
+*   The app backend holds a list of all the processes the images has to go trhough.
+*   The app backend takes each image and queues each process in order.
+
+*   `firebq` queue receives the worker path and the firebase dataset id
+*   The javascript workers receive the id of the dataset they need to process
+*   Each worker knows what to do with the data, when done, they send a `job:done` event to `firebq`
+*   `firebq` removes the job from the queue
+
+*   The map data on the drone-simulator will be updated real-time (thanks firebase)
+*   As data is been added to each cell, the map will be updating on real time.
+
+*   There are 3 stages for each image
+   *   Add sattelite image
+   *   Add a fake heatmap image
+   *   Add a fake could point like data image
+
+
