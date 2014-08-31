@@ -13,8 +13,8 @@ Class('DroneSimulator').inherits(Widget)({
 
     prototype : {
 
-        _desiredDrones: 5,
-        _picturesPerStation: 20,
+        _desiredDrones: 3,
+        _picturesPerStation: 3,
         _droneStations: [],
 
         init : function(config){

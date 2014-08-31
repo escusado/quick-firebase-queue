@@ -4,24 +4,33 @@ Class('Map').inherits(Widget)({
     prototype : {
 
         _mapSize: {w: 520, h: 290},
-        _horizontalCellQuantity: 50,
+        _horizontalCellQuantity: 10,
         _mapCells: {},
+        _mapCellsModel: {},
+        _returnRandomOrderedCells : true,
+
         myFirebaseRef: null,
 
         init : function init(config){
             Widget.prototype.init.call(this, config);
 
             this._mapCellsEl = this.element.find('.map-cells');
+            this.myFirebaseRef = new Firebase("https://toily-map-data.firebaseio.com/");
+            this.myFirebaseRef.set({}); //CleanDb
 
             this._writeMapStyles();
 
-            // this.myFirebaseRef = new Firebase("https://toily-map-data.firebaseio.com/");
-
             this._createCellMap();
+
+            this._bindEvents();
+        },
+
+        _bindEvents : function _bindEvents(){
+            this.myFirebaseRef.on('child_changed', this._handleMapDataUpdate.bind(this));
         },
 
         _createCellMap : function _createCellMap(){
-            var row, col, cellId, newCell
+            var row, col, cellId, newCell, newCellRecord,
                 neededCells = {
                     hor: Math.floor(this._mapSize.w/this._cellSize),
                     ver: Math.floor(this._mapSize.h/this._cellSize)+1
@@ -29,9 +38,8 @@ Class('Map').inherits(Widget)({
 
             for(row=0; row<neededCells.ver; row+=1){
                 for(col=0; col<neededCells.hor; col+=1){
-
                     cellId = guid();
-                    newCell = this._mapCells[cellId] = new MapCell({
+                    newCellRecord = {
                         id: cellId,
                         status : 'waiting',
                         data: {
@@ -42,10 +50,15 @@ Class('Map').inherits(Widget)({
                                 y: col
                             }
                         },
-                    });
+                    };
+                    this._mapCellsModel[cellId] = newCellRecord;
+                    newCell = this._mapCells[cellId] = new MapCell();
                     newCell.render(this._mapCellsEl);
                 }
             }
+
+            //persist db
+            this.myFirebaseRef.set(this._mapCellsModel);
         },
 
         _writeMapStyles : function _writeMapStyles(){
@@ -68,9 +81,12 @@ Class('Map').inherits(Widget)({
 
         getPendingCellMaps : function getPendingCellMaps(picturesQuantity){
             var addLocked = false,
-                batchForStation = [];
+                batchForStation = [],
+                keyList = [];
 
-            shuffle(Object.keys(this._mapCells)).forEach(function(cellId){
+            keyList = this._returnRandomOrderedCells ? Util.shuffleArray(Object.keys(this._mapCells)) : Object.keys(this._mapCells);
+
+            keyList.forEach(function(cellId){
                 var mapCell = this._mapCells[cellId];
                 if(mapCell.status === 'waiting' && batchForStation.length < picturesQuantity){
                     mapCell.status = 'taken';
@@ -90,25 +106,15 @@ Class('Map').inherits(Widget)({
                 var mapCell = this._mapCells[cellId];
                 mapCell.reset();
             }, this);
+        },
+
+        _handleMapDataUpdate : function _handleMapDataUpdate(snapshot){
+            //update local model
+            var updatedRecord = snapshot.val();
+
+            this._mapCellsModel[updatedRecord.id] = updatedRecord;
+            this._mapCells[updatedRecord.id].updateData(updatedRecord.data);
         }
     }
 });
 
-function shuffle(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex ;
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-
-  return array;
-}

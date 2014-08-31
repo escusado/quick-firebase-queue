@@ -72,11 +72,11 @@ a{
     box-shadow: 0 0 0 1px rgba(0,0,0,.05);
 }
 
-.map-cell.picture-taken{
+.map-cell[status="picture-taken"]{
     background: rgba(0,0,0,.3) url(/assets/img/camera.png) no-repeat 50% 50%;
 }
 
-.map-cell.processing{
+.map-cell[status="processing"]{
     background: rgba(0,0,0,.3) url(/assets/img/hourglass.png) no-repeat 50% 50%;
 }
 
