@@ -1,56 +1,3 @@
-# Requirements:
-
-*   **correctness - The code should perform as specified, edge cases and errors should be handled.**
-   *   The queue considers workers failing, and report for the error is added if the worker had one.
-*   **style - The code should be well written and easy to understand, comments should be added where necessary.**
-   *   Well thats for you to decide :). But the same logic and style is followed on front and back.
-*   **tests - It would be great if there were some test coverage of core logic.**
-   *   The drone-simulator, uses all the `firebq` features:
-      *   job queuing
-      *   job succes handling
-      *   job error handling
-
----
-
-*   **Design a service using Firebase & node.js that can consume jobs in a queue for processing.**
-   *   [Firebq](https://github.com/escusado/quick-firebase-queue/tree/visualsim#firebq) is a job queue that holds jobs for firebase based workers.
-*   **Use Firebase for the datastore where the queue and actual processed data should live.**
-   *   The firebq and the [drone-simulator](https://github.com/escusado/quick-firebase-queue/tree/visualsim#the-idea) storage are on firebase.
-*   **Imagine a service which reads items from a queue, which contain data to indicate what kind of processing they require, that service should then dispatch those queued jobs to workers for processing.**
-   *   The Drone simulator app; displays a map and drones gathering data from it, the simulated data analisys happens on independent workers that manipulate the data directly. These workers are executed by `firebq` queue.
-*   **You can simulate the processing by using a timeout and updating a value to emulate a process that takes a bit of time and has an effect.**
-   *   The async logic in each worker is simulated this way.
-*   **It would also be great to have a dashboard that shows in real-time the states of the queue and the processing.**
-   *   The web app on  `localhost:3000/`, displays the worker queue status.
-
-## Once complete, you should have the following:
-
-*   **a node.js process that you can start which would initiate listening for new items in the queue.**
-
-```
-node bin/firebq
-```
-
-*   **a script to simulate pushing a new job to the queue**
-```
-node bin/server.js
-```
-point your browser to:
-
-```
-http://localhost:3000/
-```
-
-Click Launch.
-
-> optional:
-> Configure the simluator app, before loading the page (see config points avobe).
-
-*   **a way to monitor the queue process and show when jobs are consumed and their states in processing.**
-The app running on `http://localhost:3000/` has a queue monitor on the right.
-
----
-
 # Firebq
 
 A simple job queue manager for firebase based workers.
@@ -118,19 +65,39 @@ When the program finishes it reports the job status back to the firebqu server.
 The main server app, when the server is started it creates all the necesary workers and start the firebase database,
 it will start a socket server (using ![postal.js](https://github.com/postaljs/postal.js) for socket management).
 
-The socket server will listen to several events:
+
+#### API
+The server will listen a socket `queue` call
 
 *   `name: 'enque:job', data: 'workerScript.js:firebase-dataset-id'`
    *   this event call the job storing logic to the firebase storage
+
+The socket server will emit the result
+
 *   `name: 'job:done' data: 'firebq-job-id'`
    *   this event triggers the job done logic, releasing the job and freeing the worker
-
-The socket server will emit several events
 *   `name: job:error, data: 'firebase-dataset-id-xxxx'
    *   This event is triggered when the worker couldn't run the job and failed on execution.
 
-The flow is simple:
+The server api works over a net socket, so jobs can be enqueued remotely or locally.
 
+### firebq client
+
+A client js library to make queue jobs easy, and handling the results based on events.
+The client handles the queue and event firing for the job complete status.
+
+#### API
+
+The client API is really simple
+
+`firebaseCli.queue('scriptForWorker.js:firebase-dataset-id')`
+This queues a job on the server.
+
+`firebaseCli.bind('job:done', 'firebase-dataset-id');`
+The `job:done` event is fired each time a job finishes without errors
+
+`firebaseCli.bind('job:error', {data: 'firebase-dataset-id', error: error-object});`
+The `job:error` event fires each time a worker fails to finish
 
 ---
 # A services that consumes jobs in a queue
@@ -168,3 +135,56 @@ of each cell on the map.
    *   Add a fake could point like data image
 
 
+---
+# Requirements:
+
+*   **correctness - The code should perform as specified, edge cases and errors should be handled.**
+   *   The queue considers workers failing, and report for the error is added if the worker had one.
+*   **style - The code should be well written and easy to understand, comments should be added where necessary.**
+   *   Well thats for you to decide :). But the same logic and style is followed on front and back.
+*   **tests - It would be great if there were some test coverage of core logic.**
+   *   The drone-simulator, uses all the `firebq` features:
+      *   job queuing
+      *   job succes handling
+      *   job error handling
+
+---
+
+*   **Design a service using Firebase & node.js that can consume jobs in a queue for processing.**
+   *   [Firebq](https://github.com/escusado/quick-firebase-queue/tree/visualsim#firebq) is a job queue that holds jobs for firebase based workers.
+*   **Use Firebase for the datastore where the queue and actual processed data should live.**
+   *   The firebq and the [drone-simulator](https://github.com/escusado/quick-firebase-queue/tree/visualsim#the-idea) storage are on firebase.
+*   **Imagine a service which reads items from a queue, which contain data to indicate what kind of processing they require, that service should then dispatch those queued jobs to workers for processing.**
+   *   The Drone simulator app; displays a map and drones gathering data from it, the simulated data analisys happens on independent workers that manipulate the data directly. These workers are executed by `firebq` queue.
+*   **You can simulate the processing by using a timeout and updating a value to emulate a process that takes a bit of time and has an effect.**
+   *   The async logic in each worker is simulated this way.
+*   **It would also be great to have a dashboard that shows in real-time the states of the queue and the processing.**
+   *   The web app on  `localhost:3000/`, displays the worker queue status.
+
+## Once complete, you should have the following:
+
+*   **a node.js process that you can start which would initiate listening for new items in the queue.**
+
+```
+node bin/firebq
+```
+
+*   **a script to simulate pushing a new job to the queue**
+```
+node bin/server.js
+```
+point your browser to:
+
+```
+http://localhost:3000/
+```
+
+Click Launch.
+
+> optional:
+> Configure the simluator app, before loading the page (see config points avobe).
+
+*   **a way to monitor the queue process and show when jobs are consumed and their states in processing.**
+The app running on `http://localhost:3000/` has a queue monitor on the right.
+
+---
