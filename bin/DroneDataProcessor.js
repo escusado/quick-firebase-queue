@@ -41,7 +41,6 @@ Class('DroneDataProcessor').includes(CustomEventSupport)({
 
                 //if image is new (has all the jobs)
                 if(pendingWorker.length === this.jobs.processMapCell.length){
-                    // console.log('pending job!', this.jobs.processMapCell.length);
                     //push new job to firebq
                     this.firebqCli.enque(pendingWorker.pop()+':'+mapCellId);
                 }
@@ -52,9 +51,9 @@ Class('DroneDataProcessor').includes(CustomEventSupport)({
         _handleJobDone : function _handleJobDone(jobResult){
             //on job done, queue next job
             var mapCellId = jobResult.data.split(':')[1];
-            console.log('>>>>>', jobResult);
+
             if(this._pendingImages[mapCellId].length){
-                console.log('job done!', jobResult.data);
+                // console.log('job done!', jobResult.data);
                 this.firebqCli.enque(this._pendingImages[mapCellId].pop()+':'+mapCellId);
             }
         },

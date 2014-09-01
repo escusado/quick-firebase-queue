@@ -1,7 +1,7 @@
 var clientSocket,
     net = require('net'),
     server = net.createServer(),
-    io      = require('socket.io').listen(server),
+    io      = require('socket.io').listen(8889),
     Firebase = require("firebase"),
     myFirebaseRef = new Firebase("https://toily-firebq-storage.firebaseio.com/");
 
@@ -16,6 +16,11 @@ Class('Firebq')({
 
         _workerPool : [],
         _socketBuffer : '', //buffer socket text commands using separator '\n'
+
+        _stats : {
+            successful : 0,
+            failed : 0
+        },
 
         init : function init(config){
 
@@ -60,8 +65,8 @@ Class('Firebq')({
                 this._workerPool.push(newWorker);
 
                 //we hear the worker when its done or exited on error
-                newWorker.bind('job:done', this._handleWorkerDone.bind(this))
-                newWorker.bind('job:error', this._handleWorkerError.bind(this))
+                newWorker.bind('job:done', this._handleWorkerDone.bind(this));
+                newWorker.bind('job:error', this._handleWorkerDone.bind(this));
             }
         },
 
@@ -128,27 +133,35 @@ Class('Firebq')({
             var worker = this._getWorkerById(ev.data.workerId),
                 doneJob = worker.currentJobId;
 
+            if(ev.type === 'job:error'){
+                this._stats.failed += 1;
+            }else{
+                this._stats.successful += 1;
+            }
+
             //report done job
-            clientSocket.write('job:done|'+worker.currentJob+'\n');
+            clientSocket.write(ev.type + '|' + worker.currentJob + '\n');
+
 
             //free worker
             worker.release();
 
             //remove job from queue
             myFirebaseRef.child(doneJob).remove();
+            this._emitState();
         },
 
-        _handleWorkerError : function _handleWorkerError(ev){
-            var worker = this._getWorkerById(ev.data.workerId),
-                doneJob = worker.currentJobId;
+        _emitState : function _emitState(){
+            var data = {
+                stats : this._stats,
+                workers : []
+            };
 
-            //report error job
-            clientSocket.write('job:error|'+worker.currentJob+'\n');
+            this._workerPool.forEach(function(worker){
+                data.workers.push(worker.getStats());
+            });
 
-            //free worker
-            worker.release();
-            //remove job from queue
-            myFirebaseRef.child(doneJob).remove();
+            clientSocket.write('firebq:stats|' + JSON.stringify(data) + '\n');
         },
 
         _getWorkerById : function _getWorkerById(workerId){

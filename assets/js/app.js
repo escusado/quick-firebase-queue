@@ -16,7 +16,8 @@ Class('App').inherits(Widget)({
         },
 
         _bindEvents : function(){
-            this.socket.on('job:error', this.droneSimulator.mapCellFailed.bind(this));
+            this.socket.on('job:error', this.droneSimulator.mapCellFailed.bind(this.droneSimulator));
+            this.socket.on('firebq:stats', this.firebaseQueueMonitor.update.bind(this));
         },
 
         _handleEcho : function(data){

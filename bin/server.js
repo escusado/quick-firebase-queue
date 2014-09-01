@@ -69,6 +69,12 @@ Class('Server')({
             droneDataProcessor.bind('job:error', function(data){
                 io.sockets.emit('job:error', data);
             });
+
+            //get firebq stats
+            droneDataProcessor.firebqCli.bind('firebq:stats', function(data){
+                io.sockets.emit('firebq:stats', data);
+            });
+
         },
 
         _serverStart : function _serverStart(){

@@ -70,6 +70,16 @@ Class('Worker').includes(CustomEventSupport)({
             this.status = 'free';
             this.currentJob = null;
             this.currentJobId = null;
+        },
+
+        getStats : function getStats(){
+            var stats = {
+                id : this.id,
+                currentJob : this.currentJob,
+                currentJobId : this.currentJobId
+            };
+
+            return stats;
         }
     }
 });
