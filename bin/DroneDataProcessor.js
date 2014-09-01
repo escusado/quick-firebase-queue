@@ -52,7 +52,7 @@ Class('DroneDataProcessor').includes(CustomEventSupport)({
         _handleJobDone : function _handleJobDone(jobResult){
             //on job done, queue next job
             var mapCellId = jobResult.data.split(':')[1];
-
+            console.log('>>>>>', jobResult);
             if(this._pendingImages[mapCellId].length){
                 console.log('job done!', jobResult.data);
                 this.firebqCli.enque(this._pendingImages[mapCellId].pop()+':'+mapCellId);

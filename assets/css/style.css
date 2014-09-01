@@ -107,3 +107,10 @@ a{
     background: transparent url(/assets/img/drone.png);
     z-index: 1;
 }
+
+/*Firebase Queue Monitor*/
+
+.firebase-queue-monitor{
+    height: 100px;
+    background-color: yellow;
+}

@@ -128,7 +128,7 @@ Class('Firebq')({
                 doneJob = worker.currentJobId;
 
             //report done job
-            clientSocket.write('job:done|'+worker.currentJob);
+            clientSocket.write('job:done|'+worker.currentJob+'\n');
 
             //free worker
             worker.release();
@@ -142,7 +142,7 @@ Class('Firebq')({
                 doneJob = worker.currentJobId;
 
             //report error job
-            clientSocket.write('job:error|'+worker.currentJob);
+            clientSocket.write('job:error|'+worker.currentJob+'\n');
 
             //free worker
             worker.release();

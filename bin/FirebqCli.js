@@ -3,6 +3,9 @@ var net = require('net'),
 
 Class('FirebqCli').includes(CustomEventSupport)({
     prototype : {
+
+        _socketBuffer : '',
+
         init : function init(config){
 
             Object.keys(config || {}).forEach(function (property) {
@@ -30,18 +33,27 @@ Class('FirebqCli').includes(CustomEventSupport)({
         },
 
         _handleSocketData : function _handleSocketData(data){
-            var jobStatus = data.split('|')[0],
-                job = data.split('|')[1];
+            this._socketBuffer += data;
 
-            switch (jobStatus) {
-                case 'job:done':
-                    this.dispatch('job:done', {data: job});
-                    break;
-                case 'job:error':
-                    this.dispatch('job:error', {data: job});
-                    break;
-                default:
-                    break;
+            while(this._socketBuffer.length){
+                var bufferedCommand = this._socketBuffer.split('\n')[0];
+
+                var jobStatus = bufferedCommand.split('|')[0],
+                    job = bufferedCommand.split('|')[1];
+
+                switch (jobStatus) {
+                    case 'job:done':
+                        this.dispatch('job:done', {data: job});
+                        break;
+                    case 'job:error':
+                        this.dispatch('job:error', {data: job});
+                        break;
+                    default:
+                        break;
+                }
+
+                //remove command from buffer and continue
+                this._socketBuffer = this._socketBuffer.replace(bufferedCommand+'\n', '');
             }
         }
     }

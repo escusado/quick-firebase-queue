@@ -14,7 +14,7 @@ Class('Drone').inherits(Widget)({
         init : function(config){
             Widget.prototype.init.call(this, config);
             this._speed = Math.floor(Math.random() * 500) + 100;
-            this._speed = 10;
+            // this._speed = 10;
         },
 
         deploy : function deploy(config){

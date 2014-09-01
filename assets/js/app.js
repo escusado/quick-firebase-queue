@@ -7,6 +7,9 @@ Class('App').inherits(Widget)({
             this.droneSimulator = new DroneSimulator();
             this.droneSimulator.render(this.element);
 
+            this.firebaseQueueMonitor = new FirebaseQueueMonitor();
+            this.firebaseQueueMonitor.render(this.element);
+
             this._bindEvents();
 
             return;
