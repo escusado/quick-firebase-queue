@@ -7,7 +7,7 @@
     "express": "~4.8.2",
     "http": "0.0.0",
     "neon": "~2.0.0",
-    "postal": "^0.10.3",
-    "socket.io": "~1.0.6"
+    "socket.io": "~1.0.6",
+    "firebase": "~1.0.21"
   }
 }

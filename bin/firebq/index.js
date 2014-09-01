@@ -1,6 +1,7 @@
 var clientSocket,
     net = require('net'),
     server = net.createServer(),
+    io      = require('socket.io').listen(server),
     Firebase = require("firebase"),
     myFirebaseRef = new Firebase("https://toily-firebq-storage.firebaseio.com/");
 
