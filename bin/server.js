@@ -50,6 +50,7 @@ Class('Server')({
 
         _setRoutes : function _setRoutes(){
             app.get('/', function(req, res){
+                droneDataProcessor.reset();
                 res.sendFile('views/index.html', {'root': __dirname + '/..'});
             });
 

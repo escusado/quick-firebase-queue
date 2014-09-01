@@ -15,6 +15,8 @@ Class('MapCell').inherits(Widget)({
 
         init : function init(config){
             Widget.prototype.init.call(this, config);
+
+            this.element.attr('data-id', this.id);
         },
 
         takePicture : function takePicture(){
@@ -24,21 +26,6 @@ Class('MapCell').inherits(Widget)({
 
         setToProcessing : function setToProcessing(){
             this.status = 'processing';
-            this.updateUi();
-        },
-
-        reset : function reset(){
-            this.status = 'waiting';
-
-            this.data = {
-                layers: null,
-                size : null,
-                coords: {
-                    x: null,
-                    y: null
-                }
-            };
-
             this.updateUi();
         },
 
@@ -62,6 +49,8 @@ Class('MapCell').inherits(Widget)({
                 }.bind(this));
 
                 this.element.css('background', backgrounds.join(','));
+            }else{
+                this.element.css('background', '');
             }
 
         }

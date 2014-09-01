@@ -4,7 +4,7 @@ Class('Map').inherits(Widget)({
     prototype : {
 
         _mapSize: {w: 520, h: 290},
-        _horizontalCellQuantity: 2,
+        _horizontalCellQuantity: 20,
         _mapCells: {},
         _mapCellsModel: {},
         _returnRandomOrderedCells : false,
@@ -99,13 +99,6 @@ Class('Map').inherits(Widget)({
             }
 
             return batchForStation;
-        },
-
-        reset : function reset(){
-            Object.keys(this._mapCells).forEach(function(cellId){
-                var mapCell = this._mapCells[cellId];
-                mapCell.reset();
-            }, this);
         },
 
         _handleMapDataUpdate : function _handleMapDataUpdate(snapshot){

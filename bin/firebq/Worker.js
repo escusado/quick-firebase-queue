@@ -19,17 +19,19 @@ Class('Worker').includes(CustomEventSupport)({
         },
 
         execJob : function execJob(data){
-            console.log('worker['+this.id+'] exec: ', data);
+            //parse data
             var script = data.job.split(':')[0],
                 firebaseDataset = data.job.split(':')[1],
                 command = workerDir+script+' '+firebaseDataset;
 
+            //set state for further inspection by queue engine
             this.currentJob = data.job;
             this.currentJobId = data.id;
 
             command = __dirname+command;
             console.log('command: ', command);
             exec(command, function(error, stdout, stderr){
+                //report error
                 if(error){
                     this.dispatch('job:error', {
                         data : {
@@ -52,12 +54,13 @@ Class('Worker').includes(CustomEventSupport)({
                     return;
                 }
 
+                //report success
+                console.log('worker['+this.id+'] done: ', command);
                 this.dispatch('job:done', {
                     data:{
                         workerId : this.id
                     }
                 });
-                console.log('worker['+this.id+'] done: ', stdout);
                 return;
             }.bind(this));
 

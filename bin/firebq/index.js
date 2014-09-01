@@ -11,9 +11,10 @@ require('./Worker.js');
 Class('Firebq')({
     prototype : {
 
-        workersQuantity : 2,
+        workersQuantity : 10, //desired workers for the queue
+
         _workerPool : [],
-        _socketBuffer : '',
+        _socketBuffer : '', //buffer socket text commands using separator '\n'
 
         init : function init(config){
 
@@ -31,10 +32,12 @@ Class('Firebq')({
         },
 
         _bindEvents : function _bindEvents(){
+            //get when jobs are changed
             myFirebaseRef.on('value', this._tryToRunPendingJobs.bind(this));
         },
 
         _startServer : function _startServer(){
+            //start socket server
             server.listen(8888, 'localhost');
             console.log('Firebq server listening...');
             server.on('connection', function(socket) {
@@ -44,6 +47,7 @@ Class('Firebq')({
             }.bind(this));
         },
 
+        //instantiate all desired workers and fill the pool
         _createWorkers : function _createWorkers(){
             var newWorker;
 
@@ -53,6 +57,8 @@ Class('Firebq')({
                     status: 'free'
                 });
                 this._workerPool.push(newWorker);
+
+                //we hear the worker when its done or exited on error
                 newWorker.bind('job:done', this._handleWorkerDone.bind(this))
                 newWorker.bind('job:error', this._handleWorkerError.bind(this))
             }
@@ -61,39 +67,47 @@ Class('Firebq')({
         _handleSocketData : function _handleSocketData(socket, data){
             this._socketBuffer += data;
 
-            if(this._socketBuffer.indexOf('\n')> -1){
-                var bufferedCommand = this._socketBuffer.split('\n')[0],
-                    request = bufferedCommand.split('|')[0],
-                    data = bufferedCommand.split('|')[1];
+            //as the api window is a socket , buffer logic is needed
+            while(this._socketBuffer.length){
+                var request, data,
+                    bufferedCommand = this._socketBuffer.split('\n')[0];
 
-                //clean socket buffer
-                this._socketBuffer = this._socketBuffer.replace(bufferedCommand+'\n', ''); //clean buffer
+                request = bufferedCommand.split('|')[0]
+                data = bufferedCommand.split('|')[1];
 
                 switch (request) {
                     case 'enque:job':
+                        console.log('job enqueued', data);
                         myFirebaseRef.push({job: data, status: 'waiting'});
                         break;
                     default:
                         break;
                 }
+
+                //remove command from buffer and continue
+                this._socketBuffer = this._socketBuffer.replace(bufferedCommand+'\n', '');
             }
+
         },
 
+        //walk the jobs model searchin for pending jobs
         _tryToRunPendingJobs : function _tryToRunPendingJobs(snapshot){
-            var queue = snapshot.val(),
-                freeWorker = this._getFreeWorker();
+            var queue = snapshot.val();
 
-            //if free worker, lets check if there are available jobs
-            if(queue && freeWorker){
+            if(queue){
                 Object.keys(queue).forEach(function(jobId){
-                    var job = queue[jobId];
-                    if(job.status === 'waiting'){
-                        myFirebaseRef.child(jobId).update({status: 'processing'});
+                    var job = queue[jobId],
+                        freeWorker = this._getFreeWorker();
+
+                    if(job.status === 'waiting' && freeWorker){
+                        //lock worker and set job to processing
                         freeWorker.status = 'processing';
-                        job.id = jobId;
-                        freeWorker.execJob(job);
+                        myFirebaseRef.child(jobId).update({status: 'processing'}, function(){
+                            job.id = jobId;
+                            freeWorker.execJob(job); //start worker
+                        }.bind(this));
                     }
-                });
+                }, this);
             }
         },
 
@@ -110,17 +124,30 @@ Class('Firebq')({
         },
 
         _handleWorkerDone : function _handleWorkerDone(ev){
-            var worker = this._getWorkerById(ev.data.workerId);
+            var worker = this._getWorkerById(ev.data.workerId),
+                doneJob = worker.currentJobId;
+
+            //report done job
             clientSocket.write('job:done|'+worker.currentJob);
-            myFirebaseRef.child(worker.currentJobId).remove();
+
+            //free worker
             worker.release();
+
+            //remove job from queue
+            myFirebaseRef.child(doneJob).remove();
         },
 
         _handleWorkerError : function _handleWorkerError(ev){
-            var worker = this._getWorkerById(ev.data.workerId);
+            var worker = this._getWorkerById(ev.data.workerId),
+                doneJob = worker.currentJobId;
+
+            //report error job
             clientSocket.write('job:error|'+worker.currentJob);
-            myFirebaseRef.child(worker.currentJobId).remove();
+
+            //free worker
             worker.release();
+            //remove job from queue
+            myFirebaseRef.child(doneJob).remove();
         },
 
         _getWorkerById : function _getWorkerById(workerId){

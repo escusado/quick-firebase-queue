@@ -31,7 +31,6 @@ Class('DroneDataProcessor').includes(CustomEventSupport)({
         },
 
         enqueMapCellData : function enqueMapCellData(mapCellId){
-            console.log('>>>> enqueMapCellData: ', mapCellId);
             this._pendingImages[mapCellId] = this.jobs.processMapCell.slice(0);
             this._processNew();
         },
@@ -51,10 +50,11 @@ Class('DroneDataProcessor').includes(CustomEventSupport)({
         },
 
         _handleJobDone : function _handleJobDone(jobResult){
-            console.log('job done!', jobResult);
             //on job done, queue next job
             var mapCellId = jobResult.data.split(':')[1];
+            console.log('>>>', this._pendingImages[mapCellId].length);
             if(this._pendingImages[mapCellId].length){
+                console.log('job done!', jobResult.data);
                 this.firebqCli.enque(this._pendingImages[mapCellId].pop()+':'+mapCellId);
             }
         },
@@ -63,6 +63,10 @@ Class('DroneDataProcessor').includes(CustomEventSupport)({
             console.log('>>>> job error!!', jobResult);
             var mapCellId = jobResult.data.split(':')[1];
             this.dispatch('job:error', {data: mapCellId});
+        },
+
+        reset: function reset(){
+            this._pendingImages = {};
         }
     }
 });

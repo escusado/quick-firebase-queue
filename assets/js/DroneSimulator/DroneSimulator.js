@@ -13,8 +13,8 @@ Class('DroneSimulator').inherits(Widget)({
 
     prototype : {
 
-        _desiredDrones: 1,
-        _picturesPerStation: 2,
+        _desiredDrones: 2,
+        _picturesPerStation: 5,
         _droneStations: [],
 
         init : function(config){
@@ -57,9 +57,10 @@ Class('DroneSimulator').inherits(Widget)({
         },
 
         _handleReset : function _handleReset(){
-            this.launchEl.toggle();
-            this.resetEl.toggle();
-            this.map.reset();
+            location.reload();
+            // this.launchEl.toggle();
+            // this.resetEl.toggle();
+            // this.map.reset();
         },
 
         _deployDrones : function _deployDrones(ev){
