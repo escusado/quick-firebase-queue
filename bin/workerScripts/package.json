@@ -1,0 +1,8 @@
+{
+  "name": "Project",
+  "description": "Description",
+  "dependencies": {
+    "firebase": "^1.0.21",
+    "neon": "^2.0.0"
+  }
+}

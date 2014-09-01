@@ -1,12 +1,11 @@
-var postal = require('postal'),
-    firebqChannel = postal.channel('firebq');
+require('./FirebqCli.js')
 
-Class('DroneDataProcessor')({
+Class('DroneDataProcessor').includes(CustomEventSupport)({
     prototype : {
 
         jobs : {
             //job name      , workers order
-            processMapCell : ['addSatData.js', 'addHeatData.js', 'addPointData.js']
+            processMapCell : ['addPointData.js', 'addHeatData.js', 'addSatData.js']
         },
 
         _pendingImages : {},
@@ -17,6 +16,9 @@ Class('DroneDataProcessor')({
                 this[property] = config[property];
             }, this);
 
+
+            this.firebqCli = new FirebqCli();
+
             this._bindEvents();
 
             return true;
@@ -24,11 +26,13 @@ Class('DroneDataProcessor')({
 
         _bindEvents : function _bindEvents(){
             //listen to firebq job done event
-            firebqChannel.subscribe('job:done', this._handleJobDone.bind(this));
+            this.firebqCli.bind('job:done', this._handleJobDone.bind(this));
+            this.firebqCli.bind('job:error', this._handleJobError.bind(this));
         },
 
-        enqueMapCellData : function enqueMapCellData(map){
-            this._pendingImages[map] = this.jobs.processMapCell.slice(0);
+        enqueMapCellData : function enqueMapCellData(mapCellId){
+            console.log('>>>> enqueMapCellData: ', mapCellId);
+            this._pendingImages[mapCellId] = this.jobs.processMapCell.slice(0);
             this._processNew();
         },
 
@@ -38,18 +42,27 @@ Class('DroneDataProcessor')({
 
                 //if image is new (has all the jobs)
                 if(pendingWorker.length === this.jobs.processMapCell.length){
-                    console.log('pending job!', this.jobs.processMapCell.length);
+                    // console.log('pending job!', this.jobs.processMapCell.length);
                     //push new job to firebq
-                    firebqChannel.publish('enque:job', pendingWorker.pop()+':'+mapCellId);
+                    this.firebqCli.enque(pendingWorker.pop()+':'+mapCellId);
                 }
 
             }, this);
         },
 
-        _handleJobDone : function _handleJobDone(data, envelope){
+        _handleJobDone : function _handleJobDone(jobResult){
+            console.log('job done!', jobResult);
             //on job done, queue next job
-            console.log('job done!', data);
-            firebqChannel.publish('enque:job',  this._pendingImages[data.mapCellId].pop()+':'+data.mapCellId);
+            var mapCellId = jobResult.data.split(':')[1];
+            if(this._pendingImages[mapCellId].length){
+                this.firebqCli.enque(this._pendingImages[mapCellId].pop()+':'+mapCellId);
+            }
+        },
+
+        _handleJobError : function _handleJobError(jobResult){
+            console.log('>>>> job error!!', jobResult);
+            var mapCellId = jobResult.data.split(':')[1];
+            this.dispatch('job:error', {data: mapCellId});
         }
     }
 });

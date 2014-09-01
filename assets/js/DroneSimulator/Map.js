@@ -4,10 +4,10 @@ Class('Map').inherits(Widget)({
     prototype : {
 
         _mapSize: {w: 520, h: 290},
-        _horizontalCellQuantity: 10,
+        _horizontalCellQuantity: 2,
         _mapCells: {},
         _mapCellsModel: {},
-        _returnRandomOrderedCells : true,
+        _returnRandomOrderedCells : false,
 
         myFirebaseRef: null,
 

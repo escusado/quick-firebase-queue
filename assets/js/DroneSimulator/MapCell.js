@@ -58,7 +58,7 @@ Class('MapCell').inherits(Widget)({
                 backgrounds = this.data.layers.map(function(background){
                     var x = this.element.width() * this.data.coords.x,
                         y = this.element.height() * this.data.coords.y;
-                    return background.replace('{pos}', '-'+x+'px -'+y+'px');
+                    return background.replace('{pos}', '-'+y+'px -'+x+'px');
                 }.bind(this));
 
                 this.element.css('background', backgrounds.join(','));

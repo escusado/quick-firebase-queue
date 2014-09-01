@@ -1,6 +1,7 @@
 #! /usr/local/bin/node
 
 require('neon');
+require('neon/stdlib');
 
 //Config
 var serverPort = 3000;
@@ -23,7 +24,7 @@ Class('Server')({
         init : function (){
             this._configureApp();
             this._setRoutes();
-            this._setupSockets();
+            this._bindEvents();
             this._serverStart();
 
 
@@ -55,11 +56,17 @@ Class('Server')({
             return this;
         },
 
-        _setupSockets : function _setupSockets(){
+        _bindEvents : function _bindEvents(){
             var server = this;
 
+            //front end drone complete
             io.sockets.on('connection', function (socket) {
                 socket.on('batch:complete', server._handleDroneData.bind(this, socket));
+            });
+
+            //drone backend app, process failed
+            droneDataProcessor.bind('job:error', function(data){
+                io.sockets.emit('job:error', data);
             });
         },
 

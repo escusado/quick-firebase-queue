@@ -61,18 +61,86 @@ A simple javascript/node job queue for firebase based data workers.
 
 ### Constraints
 
+*   The queue should use firebase as its job storage
+*   The jobs can be difreren type
+*   The workers must process data stores in firebase aswell
 
+### Assumptions
+
+*   As the worker is processing firebase data, _it will do that_, so all the connection and processing logic is up to the worker itself
+
+## Functional Spec
+
+The job queue is handled by a server, this server receives job processing requests in text format.
+The job is stored and processed when the associated worker gets free.
+
+## Blackbox
+
+```
+firebq
++------------------------------------------------+
+|firebase storage                                |
++------------------------------------------------+
+|"workerScript.js:firebase-dataset-id-xxxx"      |
+|"anotherWorkerScript.js:firebase-dataset-id-xxx |
+| ...                                            |
++--+---------------------------------------------+
+   |
+   |
++--v--------------------------+
+|workers pool                 |
+| +------+  +------+ +------+ |
+| |Worker|  |Worker| |...   | |
+| +---+--+  +--+---+ +------+ |
++-----|--------|--------------+
+      |        |
+      |        +-----------------+
+      |                          |
+      |                          |
++-----|--------------------------|------------+
+| +---v-----------+  +-----------v----------+ |
+| |workerScript.js|  |anotherWorkerScript.js| |
+| +---------------+  +----------------------+ |
+| /workerScripts                              |
++---------------------------------------------+
+
+```
+
+## Components
+
+Firebq stores its jobs in text format, that holds the script to execute and the dataset id that will be passed to it.
+The firebq server has a `worker pool` that contains n Worker class instances.
+The `/workerScripts` folder contains all the job type scripts for the worker to load and execute.
+When the program finishes it reports the job status back to the firebqu server.
+
+### firebq Server
+
+The main server app, when the server is started it creates all the necesary workers and start the firebase database,
+it will start a socket server (using ![postal.js](https://github.com/postaljs/postal.js) for socket management).
+
+The socket server will listen to several events:
+
+*   `name: 'enque:job', data: 'workerScript.js:firebase-dataset-id'`
+   *   this event call the job storing logic to the firebase storage
+*   `name: 'job:done' data: 'firebq-job-id'`
+   *   this event triggers the job done logic, releasing the job and freeing the worker
+
+The socket server will emit several events
+*   `name: job:error, data: 'firebase-dataset-id-xxxx'
+   *   This event is triggered when the worker couldn't run the job and failed on execution.
+
+The flow is simple:
 
 
 ---
 # A services that consumes jobs in a queue
 
-![Drone sim](http://f.cl.ly/items/1C2B1S2I280E0N0W1s02/Screen%20Shot%202014-08-31%20at%205.36.30%20PM.png)
-
 ## The idea
 
 A Drone simulator, that displays a grid divided map, and drones taking pictures
 of each cell on the map.
+
+![Drone sim](http://f.cl.ly/items/1C2B1S2I280E0N0W1s02/Screen%20Shot%202014-08-31%20at%205.36.30%20PM.png)
 
 ### How it works
 

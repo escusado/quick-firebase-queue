@@ -13,7 +13,7 @@ Class('DroneSimulator').inherits(Widget)({
 
     prototype : {
 
-        _desiredDrones: 10,
+        _desiredDrones: 1,
         _picturesPerStation: 2,
         _droneStations: [],
 
@@ -84,11 +84,14 @@ Class('DroneSimulator').inherits(Widget)({
             var processedMapCellIds = [];
 
             processedMapCells.forEach(function(mapCell){
-                console.log('>', mapCell);
                 processedMapCellIds.push(mapCell.id);
             });
 
             app.socket.emit('batch:complete', {data: processedMapCellIds});
+        },
+
+        mapCellFailed : function mapCellFailed(data){
+            console.log('>>>> Failed map cell:', data);
         }
     }
 });

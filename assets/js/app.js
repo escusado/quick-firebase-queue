@@ -3,16 +3,17 @@ Class('App').inherits(Widget)({
         init : function(config){
             Widget.prototype.init.call(this, config);
 
-            this._bindEvents();
 
             this.droneSimulator = new DroneSimulator();
             this.droneSimulator.render(this.element);
+
+            this._bindEvents();
 
             return;
         },
 
         _bindEvents : function(){
-            this.socket.on('server:echo', this._handleEcho.bind(this));
+            this.socket.on('job:error', this.droneSimulator.mapCellFailed.bind(this));
         },
 
         _handleEcho : function(data){
