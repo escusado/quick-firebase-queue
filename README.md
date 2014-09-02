@@ -6,7 +6,7 @@ A simple job queue manager for firebase based workers.
 
 ## Quick usage
 
-1) Clone the repo & isntall dependencies:
+1) Clone the repo & install dependencies:
 
 ```
 git clone: git@github.com:escusado/quick-firebase-queue.git
@@ -18,7 +18,7 @@ npm install
 
 3) Configure the Drone-Simulator client data storage [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/Map.js#L18)
 
-(emtpy firebase databases are ok)
+_(empty firebase databases are ok)_
 
 4) Start the firebq server
 ```
@@ -47,8 +47,8 @@ A simple javascript/node job queue for firebase based data workers.
 ### Constraints
 
 *   The queue should use firebase as its job storage
-*   The jobs can be difreren type
-*   The workers must process data stores in firebase aswell
+*   The jobs can be different type
+*   The workers must process data stores in firebase as well
 
 ### Assumptions
 
@@ -57,9 +57,10 @@ A simple javascript/node job queue for firebase based data workers.
 ## Functional Spec
 
 The job queue is handled by a server, this server receives job processing requests in text format.
-The job is stored and processed when the associated worker gets free.
+The job is stored and processed when a worker gets free.
 
 ## Theory of Operation
+
 
 ```
 firebq
@@ -109,16 +110,19 @@ The firebq server has a `worker pool` that contains n Worker class instances.
 The `/workerScripts` folder contains all the job type scripts for the worker to load and execute.
 When the program finishes it reports the job status back to the firebqu server.
 
-### firebq Server
+### firebq Server (here)[https://github.com/escusado/quick-firebase-queue/blob/master/bin/firebq/index.js#L11]
 
-The main server app, when the server is started it creates all the necesary workers and start the firebase database,
-it will start a socket server (using ![postal.js](https://github.com/postaljs/postal.js) for socket management).
+The main server app, when the server is started it creates all the necessary workers and start the firebase database,
+the server listens for commands on the net socket port `8888`. Commands are queued using the format:
 
+```
+enqueue:job|commands
+```
 
 #### API
 The server will listen a socket `queue` call
 
-*   `name: 'enque:job', data: 'workerScript.js:firebase-dataset-id'`
+*   `name: 'enqueue:job', data: 'workerScript.js:firebase-dataset-id'`
    *   this event call the job storing logic to the firebase storage
 
 The socket server will emit the result
@@ -130,7 +134,7 @@ The socket server will emit the result
 
 The server api works over a net socket, so jobs can be enqueued remotely or locally.
 
-### firebq client
+### firebq Client [here](https://github.com/escusado/quick-firebase-queue/blob/master/bin/FirebqCli.js#L4)
 
 A client js library to make queue jobs easy, and handling the results based on events.
 The client handles the queue and event firing for the job complete status.
@@ -162,12 +166,12 @@ of each cell on the map.
 
 *   A map is created using the Map class (can be configured [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/Map.js#L7)).
 *   A set of drone stations are placed next to the map (the number of station can be configured [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/DroneSimulator.js#L16-17))
-*   A controller assign a set of unasigned map cells to each drone station.
+*   A controller assign a set of unassigned map cells to each drone station.
 *   The station deploys the drone with all the targets for picture taking.
 *   The drone does its job cell map by cell map (the quantity of pictures per drone can be configured here: TODO)
 *   The drone returns to its station to deliver the imagery payload.
 *   The station receives the imagery data and sends it to the app backend for processing
-*   The app backend holds a list of all the processes the images has to go trhough.
+*   The app backend holds a list of all the processes the images has to go through.
 *   The app backend takes each image and queues each process in order.
 
 *   `firebq` queue receives the worker path and the firebase dataset id
@@ -179,7 +183,7 @@ of each cell on the map.
 *   As data is been added to each cell, the map will be updating on real time.
 
 *   There are 3 stages for each image
-   *   Add sattelite image
+   *   Add satellite image
    *   Add a fake heatmap image
    *   Add a fake could point like data image
 
@@ -233,7 +237,7 @@ http://localhost:3000/
 Click Launch.
 
 > optional:
-> Configure the simluator app, before loading the page (see config points avobe).
+> Configure the simulator app, before loading the page (see config points avobe).
 
 *   **a way to monitor the queue process and show when jobs are consumed and their states in processing.**
 The app running on `http://localhost:3000/` has a queue monitor on the right.

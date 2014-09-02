@@ -1,7 +1,6 @@
 var clientSocket,
     net = require('net'),
     server = net.createServer(),
-    io      = require('socket.io').listen(8889),
     Firebase = require("firebase"),
     myFirebaseRef = new Firebase("https://toily-firebq-storage.firebaseio.com/");
 
@@ -82,7 +81,7 @@ Class('Firebq')({
                 data = bufferedCommand.split('|')[1];
 
                 switch (request) {
-                    case 'enque:job':
+                    case 'enqueue:job':
                         console.log('job enqueued', data);
                         myFirebaseRef.push({job: data, status: 'waiting'});
                         break;

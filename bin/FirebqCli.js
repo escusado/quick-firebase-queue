@@ -28,7 +28,7 @@ Class('FirebqCli').includes(CustomEventSupport)({
         },
 
         enque : function enque(job){
-            socket.write('enque:job|'+job+'\n');
+            socket.write('enqueue:job|'+job+'\n');
         },
 
         _handleSocketData : function _handleSocketData(data){
