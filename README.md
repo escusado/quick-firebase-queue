@@ -215,8 +215,7 @@ of each cell on the map.
 *   **tests - It would be great if there were some test coverage of core logic.**
    *   The drone-simulator, uses all the `firebq` features:
       *   job queuing
-      *   job succes handling
-      *   job error handling
+      *   job done handling
 
 ---
 
