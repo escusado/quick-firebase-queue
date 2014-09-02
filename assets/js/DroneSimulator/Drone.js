@@ -8,12 +8,16 @@ Class('Drone').inherits(Widget)({
         _currentCellMap : null,
         _home : {top: 0, left: 0},
         stationPosition : null,
+        speedRange : {
+            min : 500,
+            max: 2000
+        },
         _speed : null,
         state: 'waiting',
 
         init : function(config){
             Widget.prototype.init.call(this, config);
-            this._speed = Math.floor(Math.random() * 1000) + 500;
+            this._speed = Math.floor(Math.random() * this.speedRange.max) + this.speedRange.min;
             // this._speed = 10;
         },
 
