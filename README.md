@@ -41,7 +41,7 @@ http://localhost:3000/
 
 
 > optional:
-> Configure the simulator app, before loading the page (see config points avobe).
+> Configure the simulator app, before loading the page
 > *   The simulator can display different number of cell slicing config [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/Map.js#L7)
 > *   The number of drones and the pictures it can take can be changed [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/DroneSimulator.js#L16-17)
 > *   The speed of each Drone is assigned randomly between to ranges that can be changed [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/Drone.js#L11-14)
