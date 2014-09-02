@@ -28,7 +28,6 @@ Class('FirebqCli').includes(CustomEventSupport)({
         },
 
         enque : function enque(job){
-            // console.log('enqueuing', job);
             socket.write('enque:job|'+job+'\n');
         },
 
@@ -41,8 +40,6 @@ Class('FirebqCli').includes(CustomEventSupport)({
                 var jobStatus = bufferedCommand.split('|')[0],
                     job = bufferedCommand.split('|')[1];
 
-                console.log('>>>> log', jobStatus, job);
-
                 switch (jobStatus) {
                     case 'job:done':
                         this.dispatch('job:done', {data: job});
@@ -51,7 +48,7 @@ Class('FirebqCli').includes(CustomEventSupport)({
                         this.dispatch('job:error', {data: job});
                         break;
                     case 'firebq:stats':
-                        this.dispatch('firebq:stats', {data: data});
+                        this.dispatch('firebq:stats', {data: job});
                         break;
                     default:
                         break;
