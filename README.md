@@ -17,6 +17,7 @@ npm install
 ```
 
 > optional
+>
 > 2) Config the firebq data storage [here](https://github.com/escusado/quick-firebase-queue/blob/master/bin/firebq/index.js#L6)
 >
 > 3) Configure the Drone-Simulator client data storage [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/Map.js#L18)
