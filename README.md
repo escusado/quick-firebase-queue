@@ -2,7 +2,7 @@
 
 A simple job queue manager for firebase based workers.
 
-![](http://f.cl.ly/items/281J0D2E383U3w1P112C/NTM6x5ivZi.gif)
+![](http://f.cl.ly/items/0H0Z0j1t0Y0n2f0i0q1I/Screen%20Recording%202014-09-01%20at%2010.59%20PM.gif)
 
 ---
 
