@@ -2,9 +2,7 @@
 
 A simple job queue manager for firebase based workers.
 
-## Abstract
-
-A simple javascript/node job queue for firebase based data workers.
+---
 
 ## Quick usage
 
@@ -38,6 +36,13 @@ http://localhost:3000/
 ```
 
 7) Hit Launch! :D
+
+---
+
+## Abstract
+
+A simple javascript/node job queue for firebase based data workers.
+
 
 ### Constraints
 
