@@ -39,6 +39,14 @@ http://localhost:3000/
 
 7) Hit Launch! :D
 
+
+> optional:
+> Configure the simulator app, before loading the page (see config points avobe).
+> *   The simulator can display different number of cell slicing config [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/Map.js#L7)
+> *   The number of drones and the pictures it can take can be changed [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/DroneSimulator.js#L16-17)
+> *   The speed of each Drone is assigned randomly between to ranges that can be changed [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/Drone.js#L11-14)
+> *   Jobs for the map cells (adding more images) can be added [here](https://github.com/escusado/quick-firebase-queue/blob/master/bin/DroneDataProcessor.js#L8), there must be a matching script on the `workerScripts` folder
+
 ---
 
 ## Abstract
@@ -242,13 +250,6 @@ http://localhost:3000/
 ```
 
 Click Launch.
-
-> optional:
-> Configure the simulator app, before loading the page (see config points avobe).
-> *   The simulator can display different number of cell slicing config [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/Map.js#L7)
-> *   The number of drones and the pictures it can take can be changed [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/DroneSimulator.js#L16-17)
-> *   The speed of each Drone is assigned randomly between to ranges that can be changed [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/Drone.js#L11-14)
-> *   Jobs for the map cells (adding more images) can be added [here](https://github.com/escusado/quick-firebase-queue/blob/master/bin/DroneDataProcessor.js#L8), there must be a matching script on the `workerScripts` folder
 
 *   **a way to monitor the queue process and show when jobs are consumed and their states in processing.**
 The app running on `http://localhost:3000/` has a queue monitor on the right.
