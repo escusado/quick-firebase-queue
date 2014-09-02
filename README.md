@@ -112,7 +112,7 @@ The firebq server has a `worker pool` that contains n Worker class instances.
 The `/workerScripts` folder contains all the job type scripts for the worker to load and execute.
 When the program finishes it reports the job status back to the firebqu server.
 
-### firebq Server (here)[https://github.com/escusado/quick-firebase-queue/blob/master/bin/firebq/index.js#L11]
+### firebq Server [here](https://github.com/escusado/quick-firebase-queue/blob/master/bin/firebq/index.js#L11)
 
 The main server app, when the server is started it creates all the necessary workers and start the firebase database,
 the server listens for commands on the net socket port `8888`. Commands are queued using the format:
