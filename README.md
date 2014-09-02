@@ -8,7 +8,7 @@ A simple javascript/node job queue for firebase based data workers.
 
 ## Quick usage
 
-1. Clone the repo & isntall dependencies:
+1) Clone the repo & isntall dependencies:
 
 ```
 git clone: git@github.com:escusado/quick-firebase-queue.git
@@ -16,21 +16,28 @@ cd quick-firebase-queue
 npm install
 ```
 
-2. Config the firebq data storage [here](https://github.com/escusado/quick-firebase-queue/blob/master/bin/firebq/index.js#L6)
+2) Config the firebq data storage [here](https://github.com/escusado/quick-firebase-queue/blob/master/bin/firebq/index.js#L6)
 
-3. Configure the Drone-Simulator client data storage [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/Map.js#L18)
+3) Configure the Drone-Simulator client data storage [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/Map.js#L18)
 
 (emtpy firebase databases are ok)
 
-4. Start the firebq server
+4) Start the firebq server
 ```
 node bin/firebq
 ```
 
-5. Start the Drone Simulator web-app
+5) Start the Drone Simulator web-app
 ```
 node bin/server.js
 ```
+
+6) point your browser to
+```
+http://localhost:3000/
+```
+
+7) Hit Launch! :D
 
 ### Constraints
 
