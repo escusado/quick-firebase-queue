@@ -206,6 +206,14 @@ stats = {
 ```
 This methods allows for inspection of the worker, its current status and job (if any).
 
+### The workerScript
+
+The scripts should be callable executable command line program, that can receive
+the dataset argument, they should perform its tasks as the script wants, that's
+why we let the connection and data manipulation logic to itself.
+
+The script should exit when all the tasks are done (e.g. [add the fake heatmap](https://github.com/escusado/quick-firebase-queue/blob/master/bin/workerScripts/addHeatData.js#L25))
+
 ---
 # A services that consumes jobs in a queue
 
