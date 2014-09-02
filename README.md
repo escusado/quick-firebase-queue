@@ -121,6 +121,9 @@ the server listens for commands on the net socket port `8888`. Commands are queu
 enqueue:job|commands
 ```
 
+The job is parsed and distributed among an number of workers configurable [here](https://github.com/escusado/quick-firebase-queue/blob/master/bin/firebq/index.js#L14),
+the server will emit data for monitoring using the socket. (The web app has the monitor ui implementation)
+
 #### API
 The server will listen a socket `queue` call
 
@@ -133,6 +136,8 @@ The socket server will emit the result
    *   this event triggers the job done logic, releasing the job and freeing the worker
 *   `name: job:error, data: 'firebase-dataset-id-xxxx'
    *   This event is triggered when the worker couldn't run the job and failed on execution.
+*   `firebq:stats`, data: JSON string of the workers status
+   *   This event is emmited every time the state of the wokers changes
 
 The server api works over a net socket, so jobs can be enqueued remotely or locally.
 
