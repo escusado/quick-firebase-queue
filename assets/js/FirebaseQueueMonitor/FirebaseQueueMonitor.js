@@ -14,7 +14,7 @@ Class('FirebaseQueueMonitor').inherits(Widget)({
         myFirebaseRef : null,
 
         _workers : [],
-        _jobs    : [],
+        _jobs    : {},
 
         init : function(config){
             Widget.prototype.init.call(this, config);
@@ -22,7 +22,7 @@ Class('FirebaseQueueMonitor').inherits(Widget)({
             this.myFirebaseRef = new Firebase("https://toily-firebq-storage.firebaseio.com/");
 
             this.workerContainerEl = this.element.find('.worker-container')
-            this.jobsContainerEl = this.element.find('.worker-container')
+            this.jobsContainerEl = this.element.find('.jobs-container')
 
             this._bindEvents();
         },
@@ -36,23 +36,16 @@ Class('FirebaseQueueMonitor').inherits(Widget)({
                 updatedJobs = [],
                 jobs = snapshot.val();
 
-            if(jobs){ //database has values in it
+            if(jobs){
+                Object.keys(jobs).forEach(function(jobId, i){
+                    var updatedJob = this._jobs[jobId];
 
-                if(this._jobs.length){
-                    //jobs already here, just update
-                    Object.keys(jobs).forEach(function(jobId, i){
+                    if(updatedJob){
                         this._jobs[jobId].update({
-                            id: jobId,
                             data: jobs[jobId]
                         });
                         updatedJobs.push(jobId);
-                    }, this);
-
-                    this._removeNotUpdatedJobs(updatedJobs);
-
-                }else{
-                    //no jobs? create them then
-                    Object.keys(jobs).forEach(function(jobId, i){
+                    }else{
                         var job = jobs[jobId],
                             newJob = new Job({
                                 id : jobId,
@@ -60,9 +53,12 @@ Class('FirebaseQueueMonitor').inherits(Widget)({
                             });
                         this._jobs[jobId] = newJob;
                         newJob.render(this.jobsContainerEl);
-                    }, this);
-                }
+                    }
+                }, this);
 
+                if(updatedJobs.length){
+                    this._removeNotUpdatedJobs(updatedJobs);
+                }
             }
 
         },
@@ -71,35 +67,34 @@ Class('FirebaseQueueMonitor').inherits(Widget)({
             var newWorker,
                 data = JSON.parse(stat.data);
 
-            if(this._workers.length){
-                //workers already here, just update
-                data.workers.forEach(function(worker, i){
+            data.workers.forEach(function(worker, i){
 
+                if(this._workers[i]){
                     this._workers[i].update({
                         data: worker
                     });
-
-                }, this);
-
-            }else{
-                //no workers? create them then
-                data.workers.forEach(function(worker, i){
+                }else{
                     newWorker = new Worker({
                         id : i,
                         data : worker
                     });
                     this._workers.push(newWorker);
                     newWorker.render(this.workerContainerEl);
-                }, this);
-            }
+                }
 
+
+            }, this);
         },
 
         _removeNotUpdatedJobs : function _removeNotUpdatedJobs(updatedJobs){
             Object.keys(this._jobs).forEach(function(jobId){
                 // var jobWidget = this._jobs[jobWidgetId];
                 if(updatedJobs.indexOf(jobId) < 0){
-                    this._jobs[jobId].destroy();
+                    var removingJob = this._jobs[jobId];
+
+                    removingJob.destroy();
+
+                    delete this._jobs[jobId];
                 }
             }, this);
         }

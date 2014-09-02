@@ -6,6 +6,30 @@ A simple job queue manager for firebase based workers.
 
 A simple javascript/node job queue for firebase based data workers.
 
+## Quick usage
+
+1. Clone the repo & isntall dependencies:
+
+```
+git clone: git@github.com:escusado/quick-firebase-queue.git
+cd quick-firebase-queue
+npm install
+```
+
+2. Config the firebq data storage [here](https://github.com/escusado/quick-firebase-queue/blob/master/bin/firebq/index.js#L6)
+3. Configure the Drone-Simulator client data storage [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/Map.js#L18)
+(emtpy firebase databases are ok)
+
+4. Start the firebq server
+```
+node bin/firebq
+```
+
+5. Start the Drone Simulator web-app
+```
+node bin/server.js
+```
+
 ### Constraints
 
 *   The queue should use firebase as its job storage
@@ -21,7 +45,7 @@ A simple javascript/node job queue for firebase based data workers.
 The job queue is handled by a server, this server receives job processing requests in text format.
 The job is stored and processed when the associated worker gets free.
 
-## Blackbox
+## Theory of Operation
 
 ```
 firebq
@@ -52,6 +76,17 @@ firebq
 +---------------------------------------------+
 
 ```
+
+The firebq server, takes commands in the following format:
+
+```
+workerSctipt.js:firebase-data-set-id
+```
+
+The server will take the first part and will try to execute the script using a `Worker` instance.
+The worker will fin the script on the `/workerScripts` folder, and will output as an [event](https://github.com/escusado/quick-firebase-queue/blob/master/bin/firebq/Worker.js#L33).
+The server will catch the completion event for the worker and send the output as an `job:done` or `job:error`, through the socket.
+
 
 ## Components
 
@@ -111,8 +146,8 @@ of each cell on the map.
 
 ### How it works
 
-*   A map is created using the Map class (can be configured here: TODO).
-*   A set of drone stations are placed next to the map (the number of station can be configured here: TODO)
+*   A map is created using the Map class (can be configured [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/Map.js#L7)).
+*   A set of drone stations are placed next to the map (the number of station can be configured [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/DroneSimulator.js#L16-17))
 *   A controller assign a set of unasigned map cells to each drone station.
 *   The station deploys the drone with all the targets for picture taking.
 *   The drone does its job cell map by cell map (the quantity of pictures per drone can be configured here: TODO)
@@ -170,9 +205,11 @@ node bin/firebq
 ```
 
 *   **a script to simulate pushing a new job to the queue**
+
 ```
 node bin/server.js
 ```
+
 point your browser to:
 
 ```

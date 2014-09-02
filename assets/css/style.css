@@ -112,7 +112,6 @@ a{
 
 .firebase-queue-monitor{
     height: 100px;
-    background-color: yellow;
 }
 
 .worker-container{
@@ -146,3 +145,32 @@ a{
     font-weight: bold;
 
 }
+
+.job{
+    margin-top: 3px;
+    padding: 3px;
+
+    color: #333333;
+    background-color: #FFFFFF;
+    border-radius: 3px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.5);
+}
+
+.job[status="processing"]{
+    background-color: #6478FF;
+}
+
+.job[status="destroyed"]{
+    background-color:red;
+}
+
+.status{
+    font-size: 8px;
+    font-weight: bold;
+}
+
+
+.job-command{
+    margin: 3px;
+}
+

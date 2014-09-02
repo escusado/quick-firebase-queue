@@ -23,15 +23,20 @@ Class('AddHeatData')({
         _getRecordValue : function _getRecordValue(snapshot){
             var currentLayers = snapshot.val().data.layers;
             currentLayers.unshift('url(/assets/img/maps/heat.png) {pos} no-repeat');
-            myFirebaseRef.child(this.mapCellId+'/data').update({
-                layers : currentLayers
-            }, function(error){
-                if(error){
-                    throw error;
-                }
-                console.log('worker['+__filename+'] done: ', this.mapCellId);
-                process.exit(0);
-            });
+
+            //async
+                myFirebaseRef.child(this.mapCellId+'/data').update({
+                    layers : currentLayers
+                }, function(error){
+                    if(error){
+                        throw error;
+                    }
+
+                    setTimeout(function(){
+                        console.log('worker['+__filename+'] done: ', this.mapCellId);
+                        process.exit(0);
+                    }, Math.floor(Math.random() * 5000) + 1000);
+                });
 
         }
     }

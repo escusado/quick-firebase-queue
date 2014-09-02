@@ -6,6 +6,10 @@ Class('Worker').inherits(Widget)({
             Widget.prototype.init.call(this, config);
 
             this.element.html(this.id);
+        },
+
+        update : function(data){
+            // console.log('>>>', data);
         }
     }
 });

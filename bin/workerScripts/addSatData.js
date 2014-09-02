@@ -28,8 +28,10 @@ Class('AddSatData')({
                 if(error){
                     throw error;
                 }
-                console.log('worker['+__filename+'] done: ', this.mapCellId);
-                process.exit(0);
+                setTimeout(function(){
+                    console.log('worker['+__filename+'] done: ', this.mapCellId);
+                    process.exit(0);
+                }, Math.floor(Math.random() * 5000) + 1000);
             });
 
         }
