@@ -47,6 +47,7 @@ http://localhost:3000/
 > *   The simulator can display different number of cell slicing config [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/Map.js#L7)
 > *   The number of drones and the pictures it can take can be changed [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/DroneSimulator.js#L16-17)
 > *   The speed of each Drone is assigned randomly between to ranges that can be changed [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/Drone.js#L11-14)
+> *   The map can return the next map cells in random order, the flag can be set [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/Map.js#L10)
 > *   Jobs for the map cells (adding more images) can be added [here](https://github.com/escusado/quick-firebase-queue/blob/master/bin/DroneDataProcessor.js#L8), there must be a matching script on the `workerScripts` folder
 
 ---
@@ -167,7 +168,43 @@ This queues a job on the server.
 The `job:done` event is fired each time a job finishes without errors
 
 `firebaseCli.bind('job:error', {data: 'firebase-dataset-id', error: error-object});`
+
+
 The `job:error` event fires each time a worker fails to finish
+
+### The worker
+
+The queue server runs the jobs using instances of the Worker class. The worker is
+in charge of running the scripts defined in the job record, then when the script
+is done, it will return the uoutput of it using the `job:done` or `job:error` events.
+
+#### API
+
+```
+worker.execJob(jobString)
+```
+The `execJob` method takes the job string format, and tries to execute, the exec callback
+will dispatch the job completion events (done or error).
+
+```
+worker.release()
+```
+The release method, sets the worker status to `'free'` so the queue can use it to
+run another job.
+
+```
+worker.getStats()
+```
+
+returns: an state object defined by:
+```javascript
+stats = {
+    id : worker.id,
+    currentJob : worker.currentJob,
+    currentJobId : worker.currentJobId
+}
+```
+This methods allows for inspection of the worker, its current status and job (if any).
 
 ---
 # A services that consumes jobs in a queue
@@ -256,3 +293,13 @@ Click Launch.
 The app running on `http://localhost:3000/` has a queue monitor on the right.
 
 ---
+
+Tecnologies used:
+
+node.js
+express
+socket.io
+Firebase
+(normal tcp sockets)
+[neon.js (stdlib + Widget.js)](http://azendal.github.io/neon/)
+[elastic.css](http://elasticss.com/)
