@@ -16,11 +16,12 @@ cd quick-firebase-queue
 npm install
 ```
 
-2) Config the firebq data storage [here](https://github.com/escusado/quick-firebase-queue/blob/master/bin/firebq/index.js#L6)
-
-3) Configure the Drone-Simulator client data storage [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/Map.js#L18)
-
-_(empty firebase databases are ok)_
+> optional
+> 2) Config the firebq data storage [here](https://github.com/escusado/quick-firebase-queue/blob/master/bin/firebq/index.js#L6)
+>
+> 3) Configure the Drone-Simulator client data storage [here](https://github.com/escusado/quick-firebase-queue/blob/master/assets/js/DroneSimulator/Map.js#L18)
+>
+> _(empty firebase databases are ok, default databases are already on the file)_
 
 4) Start the firebq server
 ```
