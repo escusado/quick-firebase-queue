@@ -172,7 +172,7 @@ The `job:done` event is fired each time a job finishes without errors
 
 The `job:error` event fires each time a worker fails to finish
 
-### The worker
+### The worker [here](https://github.com/escusado/quick-firebase-queue/blob/master/bin/firebq/Worker.js#L6)
 
 The queue server runs the jobs using instances of the Worker class. The worker is
 in charge of running the scripts defined in the job record, then when the script
