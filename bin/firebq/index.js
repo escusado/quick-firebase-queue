@@ -37,6 +37,9 @@ Class('Firebq')({
         },
 
         _bindEvents : function _bindEvents(){
+            //first connection finds processing jobs on the queue, we assume they have failed, so we need to run them again
+            myFirebaseRef.once('value', this._resetAbandonedJobs.bind(this));
+
             //get when jobs are changed
             myFirebaseRef.on('value', this._tryToRunPendingJobs.bind(this));
         },
@@ -48,6 +51,8 @@ Class('Firebq')({
             server.on('connection', function(socket) {
                 clientSocket = socket;
                 socket.setEncoding('utf-8');
+                this._isClientConnected = true;
+                socket.on('error', this._handleDisconnection.bind(this, socket));
                 socket.on('data', this._handleSocketData.bind(this, socket));
             }.bind(this));
         },
@@ -95,6 +100,17 @@ Class('Firebq')({
 
         },
 
+        _resetAbandonedJobs : function _resetAbandonedJobs(snapshot){
+            var queue = snapshot.val();
+
+            if(queue){
+                Object.keys(queue).forEach(function(jobId){
+                    var job = queue[jobId];
+                    myFirebaseRef.child(jobId).update({status: 'waiting'});
+                }, this);
+            }
+        },
+
         //walk the jobs model searchin for pending jobs
         _tryToRunPendingJobs : function _tryToRunPendingJobs(snapshot){
             var queue = snapshot.val();
@@ -139,8 +155,7 @@ Class('Firebq')({
             }
 
             //report done job
-            clientSocket.write(ev.type + '|' + worker.currentJob + '\n');
-
+            this.writeToSocket(ev.type + '|' + worker.currentJob + '\n');
 
             //free worker
             worker.release();
@@ -160,7 +175,7 @@ Class('Firebq')({
                 data.workers.push(worker.getStats());
             });
 
-            clientSocket.write('firebq:stats|' + JSON.stringify(data) + '\n');
+            this.writeToSocket('firebq:stats|' + JSON.stringify(data) + '\n');
         },
 
         _getWorkerById : function _getWorkerById(workerId){
@@ -171,6 +186,16 @@ Class('Firebq')({
                  }
             });
             return requestedWorker;
+        },
+
+        writeToSocket : function writeToSocket(message){
+            if(this._isClientConnected){
+                clientSocket.write(message);
+            }
+        },
+
+        _handleDisconnection : function _handleDisconnection(){
+            this._isClientConnected = false;
         },
 
         guid : (function() {

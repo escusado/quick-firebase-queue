@@ -1,10 +1,13 @@
-var net = require('net'),
-    socket = new net.Socket();
+var socket,
+    net = require('net');
 
 Class('FirebqCli').includes(CustomEventSupport)({
     prototype : {
 
         _socketBuffer : '',
+
+        _commands : [],
+        _isServerConnected : false,
 
         init : function init(config){
 
@@ -12,23 +15,46 @@ Class('FirebqCli').includes(CustomEventSupport)({
                 this[property] = config[property];
             }, this);
 
-            socket.on('error', function(){
-                console.log('Error firebq server not present in port: ' + 8888);
-            });
-
-            socket.on('connect', function(){
-                socket.setEncoding('utf-8');
-            });
-
-            socket.on('data', this._handleSocketData.bind(this));
-
-            socket.connect(8888, 'localhost');
+            this._connectSocket();
 
             return true;
         },
 
+        _connectSocket : function _connectSocket(){
+            socket = new net.Socket();
+
+            socket.on('error', function(){
+                console.log('Error firebq server not present in port: ' + 8888);
+                console.log('Reconnect attempt...');
+                this._isServerConnected = false;
+                setTimeout(function(){
+                    this._connectSocket();
+                }.bind(this), 1000);
+            }.bind(this));
+
+            socket.on('connect', function(){
+                socket.setEncoding('utf-8');
+                console.log('Firebq Cli connected');
+                this._isServerConnected = true;
+                this._sendCommands();
+            }.bind(this));
+
+            socket.on('data', this._handleSocketData.bind(this));
+
+            socket.connect(8888, 'localhost');
+        },
+
         enque : function enque(job){
-            socket.write('enqueue:job|'+job+'\n');
+            this._commands.push(job);
+            this._sendCommands();
+        },
+
+        _sendCommands : function _sendCommands(){
+            if(this._isServerConnected){
+                while(this._commands.length > 0){
+                    socket.write('enqueue:job|'+this._commands.pop()+'\n');
+                }
+            }
         },
 
         _handleSocketData : function _handleSocketData(data){

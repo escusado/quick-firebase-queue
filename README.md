@@ -169,8 +169,16 @@ The `job:done` event is fired each time a job finishes without errors
 
 `firebaseCli.bind('job:error', {data: 'firebase-dataset-id', error: error-object});`
 
-
 The `job:error` event fires each time a worker fails to finish
+
+### Reconnect and error handling
+
+#### Server
+In the case of sudden server fail, the startup sequence can watch for unfinished jobs, and reset them to `waiting` so they can be run again.
+In the case of client disconnect, the server will wait for the client to come back.
+
+#### Client
+The client also can reconnect and send the buffered commands while the server was missing.
 
 ### The worker [here](https://github.com/escusado/quick-firebase-queue/blob/master/bin/firebq/Worker.js#L6)
 

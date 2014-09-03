@@ -59,6 +59,8 @@ Class('FirebaseQueueMonitor').inherits(Widget)({
                 if(updatedJobs.length){
                     this._removeNotUpdatedJobs(updatedJobs);
                 }
+            }else{
+                this._removeNotUpdatedJobs(updatedJobs);
             }
 
         },
@@ -82,13 +84,12 @@ Class('FirebaseQueueMonitor').inherits(Widget)({
                     newWorker.render(this.workerContainerEl);
                 }
 
-
             }, this);
         },
 
         _removeNotUpdatedJobs : function _removeNotUpdatedJobs(updatedJobs){
             Object.keys(this._jobs).forEach(function(jobId){
-                // var jobWidget = this._jobs[jobWidgetId];
+
                 if(updatedJobs.indexOf(jobId) < 0){
                     var removingJob = this._jobs[jobId];
 
@@ -96,6 +97,7 @@ Class('FirebaseQueueMonitor').inherits(Widget)({
 
                     delete this._jobs[jobId];
                 }
+
             }, this);
         }
     }
